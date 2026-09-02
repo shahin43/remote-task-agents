@@ -1,0 +1,13 @@
+id: orchestrator-supervisor
+actor: orchestrator
+engine: pi-agent
+model:
+  id: claude-opus-4-5
+  provider: anthropic
+  thinkingLevel: medium
+policies:
+  approvalPolicy: never
+  maxTurns: 1
+  turnTimeoutMs: 120000
+  maxToolCalls: 8
+  maxRuntimeMinutes: 5

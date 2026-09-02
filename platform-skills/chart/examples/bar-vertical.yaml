@@ -1,0 +1,15 @@
+title: Quarterly Revenue
+mark: bar
+data:
+  values:
+    - quarter: Q1
+      revenue: 120000
+    - quarter: Q2
+      revenue: 185000
+    - quarter: Q3
+      revenue: 210000
+    - quarter: Q4
+      revenue: 245000
+encoding:
+  x: { field: quarter, type: nominal, title: null }
+  y: { field: revenue, type: quantitative, title: "Revenue ($)" }

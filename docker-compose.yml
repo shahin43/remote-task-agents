@@ -1,0 +1,107 @@
+x-agent-build: &agent-build
+  context: .
+  dockerfile: Dockerfile
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-remote_agent}
+      POSTGRES_USER: ${POSTGRES_USER:-remote_agent}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-remote_agent} -d ${POSTGRES_DB:-remote_agent}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - remote-agent-pg:/var/lib/postgresql/data
+
+  api:
+    build:
+      <<: *agent-build
+      target: remote-agent-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      REMOTE_AGENT_API_PORT: ${REMOTE_AGENT_API_PORT:-8787}
+      REMOTE_AGENT_API_TOKEN: ${REMOTE_AGENT_API_TOKEN:-}
+      REMOTE_AGENT_BOARD_PROJECT_ID: ${REMOTE_AGENT_BOARD_PROJECT_ID:-sample/service}
+      REMOTE_AGENT_BOARD_TENANT_ID: ${REMOTE_AGENT_BOARD_TENANT_ID:-default}
+      DATABASE_URL: postgres://${POSTGRES_USER:-remote_agent}@postgres:5432/${POSTGRES_DB:-remote_agent}
+      REMOTE_AGENT_SNAPSHOT_STORE: local
+    command: ["--role", "api", "--api-port", "${REMOTE_AGENT_API_PORT:-8787}"]
+    ports:
+      - "127.0.0.1:${REMOTE_AGENT_API_PORT:-8787}:${REMOTE_AGENT_API_PORT:-8787}"
+    volumes:
+      - ./runs:/app/runs
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:'+(process.env.REMOTE_AGENT_API_PORT||8787)+'/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 8
+      start_period: 25s
+
+  control:
+    build:
+      <<: *agent-build
+      target: remote-agent-control
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      REMOTE_AGENT_BOARD_PROJECT_ID: ${REMOTE_AGENT_BOARD_PROJECT_ID:-sample/service}
+      REMOTE_AGENT_BOARD_TENANT_ID: ${REMOTE_AGENT_BOARD_TENANT_ID:-default}
+      REMOTE_AGENT_POLL_INTERVAL_MS: ${REMOTE_AGENT_POLL_INTERVAL_MS:-5000}
+      REMOTE_AGENT_HEALTH_PORT: "8081"
+      DATABASE_URL: postgres://${POSTGRES_USER:-remote_agent}@postgres:5432/${POSTGRES_DB:-remote_agent}
+    command: ["--role", "control", "--control-id", "${REMOTE_AGENT_CONTROL_ID:-control-1}", "--health-port", "8081"]
+    expose:
+      - "8081"
+
+  worker:
+    build:
+      <<: *agent-build
+      target: remote-agent-worker
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      REMOTE_AGENT_BOARD_PROJECT_ID: ${REMOTE_AGENT_BOARD_PROJECT_ID:-sample/service}
+      REMOTE_AGENT_POLL_INTERVAL_MS: ${REMOTE_AGENT_POLL_INTERVAL_MS:-5000}
+      REMOTE_AGENT_WORKER_LEASE_MINUTES: ${REMOTE_AGENT_WORKER_LEASE_MINUTES:-45}
+      REMOTE_AGENT_WORKER_RUNTIME: ${REMOTE_AGENT_WORKER_RUNTIME:-sandbox-docker}
+      REMOTE_AGENT_PI_DEFAULT_PROVIDER: ${REMOTE_AGENT_PI_DEFAULT_PROVIDER:-openai}
+      REMOTE_AGENT_PI_DEFAULT_MODEL: ${REMOTE_AGENT_PI_DEFAULT_MODEL:-gpt-5.4-mini}
+      REMOTE_AGENT_PI_STORE_REQUESTS: ${REMOTE_AGENT_PI_STORE_REQUESTS:-true}
+      REMOTE_AGENT_SNAPSHOT_STORE: local
+      REMOTE_AGENT_HEALTH_PORT: "8081"
+      DATABASE_URL: postgres://${POSTGRES_USER:-remote_agent}@postgres:5432/${POSTGRES_DB:-remote_agent}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      REMOTE_AGENT_AUTOBOUNCE_HUMAN: ${REMOTE_AGENT_AUTOBOUNCE_HUMAN:-user-dev}
+    command: ["--role", "worker", "--worker-id", "${REMOTE_AGENT_WORKER_ID:-worker-1}", "--health-port", "8081"]
+    expose:
+      - "8081"
+    volumes:
+      - ./runs:/app/runs
+
+  reconciler:
+    profiles: ["reconciler"]
+    build:
+      <<: *agent-build
+      target: remote-agent-reconciler
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      REMOTE_AGENT_POLL_INTERVAL_MS: ${REMOTE_AGENT_POLL_INTERVAL_MS:-15000}
+      REMOTE_AGENT_HEALTH_PORT: "8081"
+      DATABASE_URL: postgres://${POSTGRES_USER:-remote_agent}@postgres:5432/${POSTGRES_DB:-remote_agent}
+    command: ["--role", "reconciler", "--health-port", "8081"]
+
+volumes:
+  remote-agent-pg:

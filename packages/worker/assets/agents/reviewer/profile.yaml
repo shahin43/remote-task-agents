@@ -1,0 +1,41 @@
+id: reviewer
+actor: worker
+runtime: sandbox-docker
+engine: pi-agent
+model:
+  id: gpt-5.4-mini
+  sandbox: workspace-write
+  approvalPolicy: never
+toolsets: []
+skills:
+  mode: named
+  names:
+    - repo-orientation
+policies:
+  approvalPolicy: never
+  # Reviewer needs fewer turns than the coder (it reads + decides, doesn't
+  # author large diffs), but 6 was tight enough that hitting maxTurns
+  # caused silent exits with no handoff. 20 leaves room for read → run
+  # tests → write review notes → handoff to coder/human.
+  maxTurns: 20
+  turnTimeoutMs: 600000
+  maxToolCalls: 80
+  maxRuntimeMinutes: 15
+workspaceRetention: delete-on-success
+scopePolicy:
+  allowedRepos:
+    - sample/service
+  allowedMountTypes:
+    - git
+  pathDenylist:
+    - "**/.env"
+    - "**/.git/config"
+    - "infra/**"
+  maxMountedPaths: 50
+  egressAllowlist: []
+
+capabilities:
+  - filesystem
+  - shell
+  - apply_patch
+  - handoff

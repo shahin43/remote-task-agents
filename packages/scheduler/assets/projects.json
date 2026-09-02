@@ -1,0 +1,40 @@
+{
+  "projects": [
+    {
+      "projectId": "sample/service",
+      "tenantId": "default",
+      "defaultRepos": ["sample/service"],
+      "repos": [
+        {
+          "slug": "sample/service",
+          "provider": "local",
+          "baseBranch": "main",
+          "dest": "repo",
+          "mirrorSource": "runs/seed/sample-service"
+        }
+      ],
+      "contextLayers": [
+        {
+          "path": "context/project-overview.md",
+          "content": "# Project Overview\n\nBundled sample service for local board + worker proofs.\n",
+          "source": "project-config",
+          "trustLevel": "trusted"
+        }
+      ]
+    },
+    {
+      "projectId": "default",
+      "tenantId": "default",
+      "defaultRepos": ["sample/service"],
+      "repos": [
+        {
+          "slug": "sample/service",
+          "provider": "local",
+          "baseBranch": "main",
+          "dest": "repo",
+          "mirrorSource": "runs/seed/sample-service"
+        }
+      ]
+    }
+  ]
+}

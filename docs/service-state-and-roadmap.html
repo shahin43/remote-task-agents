@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Remote Sandbox Agents — Service State, Hardening Map & Roadmap</title>
+  <style>
+    :root {
+      --paper: #f7f1e8;
+      --paper-2: #fffaf2;
+      --ink: #29231f;
+      --muted: #746b62;
+      --line: #d8cdbf;
+      --accent: #b85f43;
+      --accent-dark: #7d3928;
+      --navy: #243445;
+      --green: #52735c;
+      --amber: #a16a22;
+      --red: #94443d;
+      --blue: #48677e;
+      --shadow: 0 20px 55px rgba(57, 42, 30, .10);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% -5%, rgba(184,95,67,.14), transparent 30rem),
+        linear-gradient(180deg, #efe5d8 0, var(--paper) 28rem, var(--paper) 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: var(--accent-dark); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    code { font-family: "SFMono-Regular", Consolas, monospace; font-size: .92em; }
+    .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(247,241,232,.88);
+      border-bottom: 1px solid rgba(125,57,40,.15);
+    }
+    .topbar-inner { min-height: 58px; display: flex; align-items: center; gap: 22px; }
+    .brand { display: flex; gap: 10px; align-items: center; margin-right: auto; font-weight: 780; }
+    .mark { width: 30px; height: 30px; display: grid; place-items: center; color: white; background: var(--accent); border-radius: 9px; }
+    nav { display: flex; gap: 17px; align-items: center; overflow-x: auto; white-space: nowrap; font-size: 13px; }
+    nav a { color: var(--muted); text-decoration: none; }
+    nav a:hover { color: var(--accent-dark); }
+    .print-button { border: 1px solid var(--line); background: var(--paper-2); border-radius: 999px; padding: 7px 12px; cursor: pointer; color: var(--ink); }
+
+    header.hero { padding: 72px 0 48px; }
+    .eyebrow { color: var(--accent-dark); font-size: 12px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    h1 { max-width: 920px; margin: 12px 0 18px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(42px, 7vw, 78px); line-height: .98; letter-spacing: -.045em; }
+    .lead { max-width: 810px; color: #554b43; font-size: clamp(18px, 2.1vw, 24px); line-height: 1.5; }
+    .hero-meta { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 9px; }
+    .badge { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 999px; padding: 7px 11px; background: rgba(255,250,242,.75); font-size: 12px; font-weight: 720; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+    .dot.amber { background: var(--amber); }
+    .dot.blue { background: var(--blue); }
+
+    section { padding: 38px 0; scroll-margin-top: 74px; }
+    .section-head { display: grid; grid-template-columns: 1fr minmax(280px, 520px); gap: 30px; align-items: end; margin-bottom: 24px; }
+    h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(30px, 4vw, 48px); line-height: 1.08; letter-spacing: -.025em; }
+    h3 { margin: 0 0 9px; font-size: 17px; letter-spacing: -.01em; }
+    .section-head p, .muted { color: var(--muted); }
+
+    .grid { display: grid; gap: 16px; }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .card { background: rgba(255,250,242,.88); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: 0 7px 24px rgba(57,42,30,.055); }
+    .card p:last-child { margin-bottom: 0; }
+    .kicker { color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .metric { display: block; margin: 10px 0 6px; font-family: Georgia, serif; font-size: 34px; line-height: 1; }
+    .status { display: inline-block; border-radius: 999px; padding: 4px 8px; font-size: 10px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .status.shipped { color: #31543c; background: #dfede2; }
+    .status.partial { color: #79501d; background: #f4e5c8; }
+    .status.harden { color: #783a33; background: #f3dcd8; }
+    .status.later { color: #38566c; background: #dce8ee; }
+
+    .positioning { background: var(--navy); color: #f8f3eb; border-radius: 28px; padding: clamp(26px, 5vw, 54px); box-shadow: var(--shadow); }
+    .positioning h2 { max-width: 800px; }
+    .positioning p { color: #cfdae3; }
+    .positioning strong { color: white; }
+    .principles { margin-top: 30px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .principle { border-top: 1px solid rgba(255,255,255,.22); padding-top: 16px; }
+    .principle span { color: #e99b7f; font: 700 13px Georgia, serif; }
+
+    .flow { display: grid; grid-template-columns: repeat(7, minmax(115px, 1fr)); gap: 9px; align-items: stretch; }
+    .flow-step { min-height: 132px; position: relative; padding: 17px 14px; border-radius: 15px; border: 1px solid var(--line); background: var(--paper-2); }
+    .flow-step:not(:last-child)::after { content: "→"; position: absolute; right: -15px; top: 48px; color: var(--accent); font-size: 20px; z-index: 2; }
+    .flow-step b { display: block; margin-bottom: 8px; font-size: 13px; }
+    .flow-step small { color: var(--muted); }
+    .flow-step .n { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-bottom: 12px; border-radius: 8px; color: white; background: var(--accent); font-size: 11px; font-weight: 800; }
+
+    .layer { position: relative; padding-left: 58px; min-height: 170px; }
+    .layer-number { position: absolute; left: 20px; top: 21px; color: var(--accent); font: 700 22px Georgia, serif; }
+    .layer ul, .priority ul { padding-left: 18px; margin-bottom: 0; color: #574e46; }
+    .layer li, .priority li { margin: 6px 0; }
+
+    .filterbar { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
+    .filterbar button { border: 1px solid var(--line); background: rgba(255,250,242,.82); border-radius: 999px; padding: 8px 13px; cursor: pointer; color: var(--muted); font-weight: 700; }
+    .filterbar button.active { color: white; border-color: var(--accent); background: var(--accent); }
+    .priority { transition: opacity .18s ease, transform .18s ease; }
+    .priority.hidden { display: none; }
+    .priority-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+    .priority-id { color: var(--accent); font: 700 13px Georgia, serif; }
+
+    .usage-panel { overflow: hidden; padding: 0; }
+    .usage-banner { padding: 28px; color: white; background: linear-gradient(125deg, var(--accent-dark), var(--accent)); }
+    .usage-banner h3 { font-family: Georgia, serif; font-size: 29px; }
+    .usage-body { padding: 24px; }
+    .truth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .truth { border-radius: 14px; padding: 17px; background: #f4ede3; border: 1px solid var(--line); }
+    .truth.good { border-left: 5px solid var(--green); }
+    .truth.gap { border-left: 5px solid var(--red); }
+    .truth strong { display: block; margin-bottom: 5px; }
+
+    .data-table { width: 100%; border-collapse: collapse; margin-top: 22px; font-size: 13px; }
+    .data-table th, .data-table td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .data-table th { color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+
+    .roadmap { position: relative; }
+    .roadmap::before { content: ""; position: absolute; left: 22px; top: 32px; bottom: 32px; width: 2px; background: var(--line); }
+    .roadmap-item { position: relative; margin-left: 52px; margin-bottom: 15px; }
+    .roadmap-item::before { content: ""; position: absolute; left: -38px; top: 28px; width: 14px; height: 14px; border: 4px solid var(--paper); border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+
+    .callout { border-left: 5px solid var(--accent); background: #f3e5db; padding: 19px 22px; border-radius: 0 14px 14px 0; }
+    .callout strong { color: var(--accent-dark); }
+
+    footer { margin-top: 42px; padding: 38px 0 54px; color: var(--muted); border-top: 1px solid var(--line); font-size: 13px; }
+    .source-links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+
+    @media (max-width: 980px) {
+      .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .flow { grid-template-columns: repeat(2, 1fr); }
+      .flow-step::after { display: none; }
+      .principles { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .topbar-inner { align-items: flex-start; padding: 11px 0; flex-wrap: wrap; }
+      nav { order: 3; width: 100%; padding-bottom: 2px; }
+      header.hero { padding-top: 48px; }
+      .section-head, .grid-4, .grid-3, .grid-2, .truth-grid { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: 1fr; }
+      .layer { padding-left: 52px; }
+      .data-table { display: block; overflow-x: auto; }
+    }
+    @media print {
+      body { background: white; }
+      .topbar, .filterbar { display: none; }
+      .wrap { width: 100%; }
+      section, .card, .positioning { break-inside: avoid; box-shadow: none; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand"><span class="mark">A</span><span>Remote Sandbox Agents</span></div>
+      <nav aria-label="Document sections">
+        <a href="#position">Position</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#layers">Core layers</a>
+        <a href="#usage">Usage &amp; cost</a>
+        <a href="#hardening">Hardening</a>
+        <a href="#roadmap">Roadmap</a>
+      </nav>
+      <button class="print-button" onclick="window.print()">Print / PDF</button>
+    </div>
+  </div>
+
+  <header class="hero wrap">
+    <div class="eyebrow">Service state · 30 August 2026</div>
+    <h1>A durable board for sandboxed agent work.</h1>
+    <p class="lead">Current positioning, proven capabilities, reliability gaps, and a pragmatic route from an open-source local service to a secure, observable agent control plane.</p>
+    <div class="hero-meta">
+      <span class="badge"><span class="dot"></span> Phases 0–4 in tree</span>
+      <span class="badge"><span class="dot"></span> Docker live loop recorded green</span>
+      <span class="badge"><span class="dot amber"></span> Trusted self-host posture</span>
+      <span class="badge"><span class="dot blue"></span> Chat direction under review</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="wrap" aria-label="Current state summary">
+      <div class="grid grid-4">
+        <article class="card"><span class="status shipped">Shipped</span><span class="metric">4 roles</span><p class="muted">API, control, worker, and reconciler boundaries, plus an all-in-one local development mode.</p></article>
+        <article class="card"><span class="status shipped">Shipped</span><span class="metric">3 agents</span><p class="muted">Coder, reviewer, and author profiles demonstrate coding, review, and zero-repo document work.</p></article>
+        <article class="card"><span class="status shipped">Persisted</span><span class="metric">1 row / attempt</span><p class="muted"><code>agent_runs</code> records lifecycle, backend, snapshot, usage, skills, and artifacts per attempt.</p></article>
+        <article class="card"><span class="status partial">Boundary</span><span class="metric">Private alpha</span><p class="muted">Identity, tenant authorization, cost accuracy, and full split/live evidence still need hardening.</p></article>
+      </div>
+    </section>
+
+    <section id="position" class="wrap">
+      <div class="positioning">
+        <div class="eyebrow" style="color:#e99b7f">Current positioning</div>
+        <h2>The board is the control surface. The sandbox is the execution boundary.</h2>
+        <p>The service is not a general chat assistant and not an agent runtime exposed to external channels. It is a <strong>durable, auditable work queue</strong>: a task is assigned, control resolves policy, a worker runs in isolation, and the result returns as a snapshot, diff, artifact, summary, and handoff.</p>
+        <div class="principles">
+          <div class="principle"><span>01</span><h3>Board-driven</h3><p>Humans and deterministic control decide what runs. Model output never becomes routing authority by itself.</p></div>
+          <div class="principle"><span>02</span><h3>Session-first</h3><p>Conversation and lifecycle are durable events. Every attempt remains observable and replayable.</p></div>
+          <div class="principle"><span>03</span><h3>Harness-owned effects</h3><p>Handoffs, promotion, comments, credentials, and policy are mediated outside the model.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture" class="wrap">
+      <div class="section-head"><h2>What happens end to end</h2><p>The current proven loop is intentionally simple. New capabilities should enter through typed seams rather than weaken the control/execution split.</p></div>
+      <div class="flow">
+        <div class="flow-step"><span class="n">1</span><b>Task intake</b><small>Board task, assignee, repos, priority, creator.</small></div>
+        <div class="flow-step"><span class="n">2</span><b>Control routing</b><small>Resolve registered agent, profile, skills, scope.</small></div>
+        <div class="flow-step"><span class="n">3</span><b>Atomic claim</b><small>Worker claims a routing session with ownership lease.</small></div>
+        <div class="flow-step"><span class="n">4</span><b>Fresh sandbox</b><small>Docker or unix-local workspace and task bundle.</small></div>
+        <div class="flow-step"><span class="n">5</span><b>Agent run</b><small>Pi executes scoped tools against the workspace.</small></div>
+        <div class="flow-step"><span class="n">6</span><b>Checkpoint</b><small>Snapshot, diff, artifacts, summary, usage.</small></div>
+        <div class="flow-step"><span class="n">7</span><b>Handoff</b><small>Harness validates intent and returns work to agent or human.</small></div>
+      </div>
+    </section>
+
+    <section id="layers" class="wrap">
+      <div class="section-head"><h2>Core layers to protect</h2><p>These are the service's compounding assets. Hardening them produces more value than adding use-case-specific paths.</p></div>
+      <div class="grid grid-2">
+        <article class="card layer"><span class="layer-number">1</span><span class="status harden">Harden now</span><h3>Identity, authorization &amp; tenancy</h3><ul><li>Server-derived actor; remove client identity headers.</li><li>Viewer/operator/admin roles and project membership.</li><li>Tenant-scoped repository methods and artifact authorization.</li><li>CORS, CSRF, token/session lifecycle, negative tests.</li></ul></article>
+        <article class="card layer"><span class="layer-number">2</span><span class="status harden">Harden now</span><h3>Durable commands &amp; routing</h3><ul><li>Idempotent task creation, assignment, follow-up, approval.</li><li>Atomic routing and continuation under concurrency.</li><li>Exact profile and skill version pinning.</li><li>Control remains the single scheduling authority.</li></ul></article>
+        <article class="card layer"><span class="layer-number">3</span><span class="status harden">Harden now</span><h3>Worker ownership &amp; recovery</h3><ul><li>Lease renewal/heartbeat rather than one fixed long lease.</li><li>Fenced completion and cleanup by lease generation.</li><li>Crash, timeout, cancellation, and restart reconciliation.</li><li>Never silently swallow a lost operational ledger update.</li></ul></article>
+        <article class="card layer"><span class="layer-number">4</span><span class="status harden">Harden now</span><h3>Sandbox &amp; credential isolation</h3><ul><li>Provider capability contract and hostile-input tests.</li><li>Egress policy, secret allowlists, resource ceilings.</li><li>Archive/path/symlink safety and fresh-envelope precedence.</li><li>Docker ownership, cleanup, and multi-worker isolation.</li></ul></article>
+        <article class="card layer"><span class="layer-number">5</span><span class="status partial">Strong base</span><h3>Sessions, events &amp; attempt ledger</h3><ul><li>Ordered event replay and pagination.</li><li>One indexed <code>agent_runs</code> row per attempt.</li><li>Projection repair and transactional completion.</li><li>Retention, indexing, and query performance at scale.</li></ul></article>
+        <article class="card layer"><span class="layer-number">6</span><span class="status partial">Strong base</span><h3>Snapshots, artifacts &amp; continuity</h3><ul><li>Checksummed snapshot integrity and restore tests.</li><li>Declared, authorized artifacts rather than workspace exposure.</li><li>Retention with live-attempt and min-keep protection.</li><li>Multi-host store seam and orphan reconciliation later.</li></ul></article>
+        <article class="card layer"><span class="layer-number">7</span><span class="status partial">Improve</span><h3>Observability, usage &amp; economics</h3><ul><li>Normalize usage at ingestion, preserve raw provider values.</li><li>Per-attempt, task, profile, project, and daily rollups.</li><li>Pricing provenance, budgets, alerts, and missing-data flags.</li><li>Metrics for latency, failures, leases, snapshots, and queues.</li></ul></article>
+        <article class="card layer"><span class="layer-number">8</span><span class="status later">Extend later</span><h3>Interfaces &amp; ecosystem</h3><ul><li>Task conversation after core command correctness.</li><li>Mobile control after identity and authorization.</li><li>Channels and notifications through explicit seams.</li><li>Cloud sandboxes and orchestration only after real demand.</li></ul></article>
+      </div>
+    </section>
+
+    <section id="usage" class="wrap">
+      <div class="section-head"><h2>Usage, tokens &amp; cost</h2><p>The persistence model is correctly attempt-first, but the current normalization and display path is only partially trustworthy.</p></div>
+      <article class="card usage-panel">
+        <div class="usage-banner"><span class="status" style="background:rgba(255,255,255,.18);color:white">Current truth</span><h3>Tracked per attempt; rolled up per task.</h3><p>Task totals should always be derived from immutable attempt records—not maintained as an independent mutable counter.</p></div>
+        <div class="usage-body">
+          <div class="truth-grid">
+            <div class="truth good"><strong>What exists</strong><span><code>agent_runs.token_usage</code> is saved on finalization. Attempts are linked to task id and attempt number. The API returns attempt rows and a task rollup; the drawer displays task totals and a compact attempt token indicator.</span></div>
+            <div class="truth gap"><strong>What is unreliable today</strong><span>The Pi engine emits <code>inputTokens/outputTokens/cache*</code>, while rollup/display code looks mainly for <code>input/output</code> or provider names. Pi cost is not retained in the usage contract. Real totals may therefore show zero and cost commonly remains unknown.</span></div>
+          </div>
+
+          <table class="data-table">
+            <thead><tr><th>Level</th><th>Current state</th><th>Recommended hardening</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Provider turn</strong></td><td>Input/output and cache counters are aggregated in the Pi loop.</td><td>Normalize once at ingestion; include provider, model, request id, and explicit completeness.</td></tr>
+              <tr><td><strong>Attempt</strong></td><td>Raw JSON usage persists on the <code>agent_runs</code> row.</td><td>Add typed normalized fields: input, output, cache read/write, cost micros, currency, pricing version.</td></tr>
+              <tr><td><strong>Task</strong></td><td><code>/api/tasks/:id/usage</code> sums attempts at read time.</td><td>Keep derived rollup; show a table by attempt/agent/model with missing-cost markers.</td></tr>
+              <tr><td><strong>Project / tenant</strong></td><td>No product dashboard or durable aggregate.</td><td>Add date/profile/model/status rollups after tenant authorization exists.</td></tr>
+              <tr><td><strong>Budgets</strong></td><td>Cycle and runtime caps exist; token/cost enforcement does not.</td><td>Admission and stop policies using trusted normalized usage, with audit events.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="callout" style="margin-top:22px"><strong>Recommended rule:</strong> preserve the raw provider usage JSON for diagnostics, but make every UI, budget, and report consume one canonical normalized attempt-usage contract. Record “unknown” rather than silently treating missing cost as zero.</div>
+        </div>
+      </article>
+    </section>
+
+    <section id="hardening" class="wrap">
+      <div class="section-head"><h2>Hardening backlog</h2><p>Filter the list to separate the immediate reliability spine from product improvements and later extensions.</p></div>
+      <div class="filterbar" role="group" aria-label="Filter priorities">
+        <button class="active" data-filter="all">All</button>
+        <button data-filter="core">Core reliability</button>
+        <button data-filter="product">Product readiness</button>
+        <button data-filter="future">Later extension</button>
+      </div>
+      <div class="grid grid-3" id="priority-grid">
+        <article class="card priority" data-group="core"><div class="priority-top"><span class="priority-id">R-01</span><span class="status harden">P0</span></div><h3>Make attempt finalization durable</h3><p>Usage, artifacts, summary, and snapshot references cannot remain best-effort writes. Add retry/reconciliation and alert on incomplete terminal rows.</p></article>
+        <article class="card priority" data-group="core"><div class="priority-top"><span class="priority-id">R-02</span><span class="status harden">P0</span></div><h3>Normalize usage correctly</h3><p>Unify engine output and rollup field names, retain provider cost, test real runner shapes, and display unknown values honestly.</p></article>
+        <article class="card priority" data-group="core"><div class="priority-top"><span class="priority-id">R-03</span><span class="status harden">P0</span></div><h3>Atomic/idempotent commands</h3><p>Concurrency-test assignment, routing, follow-up, handoff, completion, approval, and retry commands.</p></article>
+        <article class="card priority" data-group="core"><div class="priority-top"><span class="priority-id">R-04</span><span class="status harden">P0</span></div><h3>Lease heartbeat &amp; fencing</h3><p>Renew ownership during long runs; reject stale completion; prove worker death, network loss, and duplicate reconciler behavior.</p></article>
+        <article class="card priority" data-group="product"><div class="priority-top"><span class="priority-id">R-05</span><span class="status harden">P0</span></div><h3>Identity and authorization</h3><p>Server-derived users, roles, project membership, artifact access, CORS/CSRF, and tenant-negative tests before mobile/shared use.</p></article>
+        <article class="card priority" data-group="core"><div class="priority-top"><span class="priority-id">R-06</span><span class="status partial">P1</span></div><h3>Immutable execution envelope</h3><p>Pin profile/model/skills/scope at route time; verify restored work cannot expand authority or replace runtime configuration.</p></article>
+        <article class="card priority" data-group="core"><div class="priority-top"><span class="priority-id">R-07</span><span class="status partial">P1</span></div><h3>Snapshot integrity at scale</h3><p>Corruption, partial writes, orphan cleanup, retention races, disk pressure, and multi-host storage parity.</p></article>
+        <article class="card priority" data-group="product"><div class="priority-top"><span class="priority-id">R-08</span><span class="status partial">P1</span></div><h3>Operator observability</h3><p>Queue depth, attempt latency, sandbox startup, failure taxonomy, profile success rate, usage/cost, and reconciler health.</p></article>
+        <article class="card priority" data-group="product"><div class="priority-top"><span class="priority-id">R-09</span><span class="status partial">P1</span></div><h3>Clean split-topology proof</h3><p>Run API, control, worker, and reconciler separately; verify restarts, concurrency, credentials, readiness, and shutdown.</p></article>
+        <article class="card priority" data-group="product"><div class="priority-top"><span class="priority-id">R-10</span><span class="status later">P2</span></div><h3>Task conversation MVP</h3><p>Render existing session history and attempts as a conversation; avoid coupling it to token streaming or orchestration.</p></article>
+        <article class="card priority" data-group="future"><div class="priority-top"><span class="priority-id">R-11</span><span class="status later">Later</span></div><h3>Mobile control surface</h3><p>Authenticated task queries and confirmed commands, foreground invalidation, and background push notifications.</p></article>
+        <article class="card priority" data-group="future"><div class="priority-top"><span class="priority-id">R-12</span><span class="status later">Later</span></div><h3>Provider &amp; orchestration ecosystem</h3><p>Cloud sandboxes, project assistant, and autonomous coordination only through proven seams and validated demand.</p></article>
+      </div>
+    </section>
+
+    <section id="roadmap" class="wrap">
+      <div class="section-head"><h2>Pragmatic extension path</h2><p>Grow from a trustworthy local core toward mobile and community extensibility without turning the next phase into a platform rewrite.</p></div>
+      <div class="roadmap">
+        <article class="card roadmap-item"><span class="status harden">Now</span><h3>Reliability spine</h3><p>Correct usage accounting, durable completion, command idempotency, lease heartbeats, immutable profiles, snapshot integrity, and split-process evidence.</p></article>
+        <article class="card roadmap-item"><span class="status partial">Next</span><h3>Task conversation, kept small</h3><p>A better view over existing task/session history and safe follow-up. Polling or lightweight invalidation is sufficient initially.</p></article>
+        <article class="card roadmap-item"><span class="status partial">Then</span><h3>Access layer and mobile-ready commands</h3><p>Server identity, roles, authorized task/artifact APIs, confirmed assignment and approval commands, plus notification seams.</p></article>
+        <article class="card roadmap-item"><span class="status later">Later</span><h3>Project assistant</h3><p>Read-only project status and natural-language proposals converted into typed commands that require human confirmation.</p></article>
+        <article class="card roadmap-item"><span class="status later">Validated demand</span><h3>Autonomous orchestration and cloud providers</h3><p>Separate runtimes, child sessions, budgets, and hosted sandboxes only after real workflows justify their operational cost.</p></article>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="callout"><strong>Definition of robust:</strong> a clean checkout can run the split topology; concurrent commands are idempotent; crashed workers reconcile without duplicate effects; every attempt has a complete or explicitly incomplete ledger; unauthorized cross-project access fails; snapshots restore safely; and live Docker/provider gates prove the same contracts used by unit tests.</div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <strong>Repository references</strong>
+      <div class="source-links">
+        <a href="../README.md">README</a>
+        <a href="../ARCHITECTURE.md">Architecture</a>
+        <a href="../DEVELOPMENT.md">Development status</a>
+        <a href="specs/2026-08-29-generic-open-source-service-spec.md">Product spec</a>
+        <a href="reviews/2026-08-30-phase-5-chat-sse-orchestrator-review.md">Chat architecture review</a>
+        <a href="tasks/README.md">Task tracker</a>
+        <a href="market-research-and-gtm-2026.html">Market research &amp; GTM</a>
+      </div>
+      <p>Generated from repository state and code review on 2026-08-30. “Shipped” means in tree; live and production claims require their explicit verification gates.</p>
+    </div>
+  </footer>
+
+  <script>
+    const buttons = document.querySelectorAll('[data-filter]');
+    const cards = document.querySelectorAll('.priority[data-group]');
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      const filter = button.dataset.filter;
+      buttons.forEach((item) => item.classList.toggle('active', item === button));
+      cards.forEach((card) => card.classList.toggle('hidden', filter !== 'all' && card.dataset.group !== filter));
+    }));
+  </script>
+</body>
+</html>

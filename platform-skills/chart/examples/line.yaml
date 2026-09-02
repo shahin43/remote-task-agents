@@ -1,0 +1,23 @@
+title: Monthly Active Users
+mark: line
+data:
+  values:
+    - month: Jan
+      users: 1200
+    - month: Feb
+      users: 1800
+    - month: Mar
+      users: 2900
+    - month: Apr
+      users: 4100
+    - month: May
+      users: 5800
+    - month: Jun
+      users: 7200
+    - month: Jul
+      users: 8900
+    - month: Aug
+      users: 10400
+encoding:
+  x: { field: month, type: ordinal, title: null }
+  y: { field: users, type: quantitative, title: Users }

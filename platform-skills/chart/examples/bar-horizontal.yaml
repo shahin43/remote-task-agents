@@ -1,0 +1,17 @@
+title: Feature Adoption
+mark: bar
+data:
+  values:
+    - feature: Search
+      users: 84
+    - feature: Dashboards
+      users: 72
+    - feature: Export
+      users: 58
+    - feature: Alerts
+      users: 45
+    - feature: API
+      users: 31
+encoding:
+  y: { field: feature, type: nominal, title: null, sort: "-x" }
+  x: { field: users, type: quantitative, title: "Active Users (%)" }

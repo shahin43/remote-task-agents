@@ -1,0 +1,16 @@
+node_modules/
+packages/*/dist/
+packages/*/*.tsbuildinfo
+runs/
+artifacts/
+workspaces/
+.env
+.env.local
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+credentials.json
+.DS_Store
+images/pi-agent/pi-runner.bundle.cjs

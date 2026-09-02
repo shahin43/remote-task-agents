@@ -1,0 +1,12 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/contracts" },
+    { "path": "./packages/shared" },
+    { "path": "./packages/orchestrator" },
+    { "path": "./packages/worker" },
+    { "path": "./packages/sandbox" },
+    { "path": "./packages/channels" },
+    { "path": "./packages/scheduler" }
+  ]
+}

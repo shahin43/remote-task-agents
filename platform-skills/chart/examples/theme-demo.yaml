@@ -1,0 +1,80 @@
+title: Revenue by Segment
+mark: bar
+data:
+  values:
+    - quarter: Q1
+      segment: Enterprise
+      revenue: 48
+    - quarter: Q1
+      segment: Mid-Market
+      revenue: 35
+    - quarter: Q1
+      segment: SMB
+      revenue: 22
+    - quarter: Q1
+      segment: Startup
+      revenue: 15
+    - quarter: Q1
+      segment: Government
+      revenue: 10
+    - quarter: Q1
+      segment: Education
+      revenue: 8
+    - quarter: Q2
+      segment: Enterprise
+      revenue: 55
+    - quarter: Q2
+      segment: Mid-Market
+      revenue: 40
+    - quarter: Q2
+      segment: SMB
+      revenue: 28
+    - quarter: Q2
+      segment: Startup
+      revenue: 18
+    - quarter: Q2
+      segment: Government
+      revenue: 12
+    - quarter: Q2
+      segment: Education
+      revenue: 9
+    - quarter: Q3
+      segment: Enterprise
+      revenue: 62
+    - quarter: Q3
+      segment: Mid-Market
+      revenue: 45
+    - quarter: Q3
+      segment: SMB
+      revenue: 32
+    - quarter: Q3
+      segment: Startup
+      revenue: 22
+    - quarter: Q3
+      segment: Government
+      revenue: 14
+    - quarter: Q3
+      segment: Education
+      revenue: 11
+    - quarter: Q4
+      segment: Enterprise
+      revenue: 71
+    - quarter: Q4
+      segment: Mid-Market
+      revenue: 52
+    - quarter: Q4
+      segment: SMB
+      revenue: 38
+    - quarter: Q4
+      segment: Startup
+      revenue: 25
+    - quarter: Q4
+      segment: Government
+      revenue: 16
+    - quarter: Q4
+      segment: Education
+      revenue: 13
+encoding:
+  x: { field: quarter, type: ordinal, title: null }
+  y: { field: revenue, type: quantitative, title: "Revenue ($M)" }
+  color: { field: segment, type: nominal, title: Segment }

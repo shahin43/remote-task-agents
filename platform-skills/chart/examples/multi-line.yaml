@@ -1,0 +1,53 @@
+title: Traffic by Channel
+mark: line
+data:
+  values:
+    - month: Jan
+      channel: Organic
+      visits: 12000
+    - month: Feb
+      channel: Organic
+      visits: 15000
+    - month: Mar
+      channel: Organic
+      visits: 19000
+    - month: Apr
+      channel: Organic
+      visits: 24000
+    - month: May
+      channel: Organic
+      visits: 28000
+    - month: Jan
+      channel: Paid
+      visits: 8000
+    - month: Feb
+      channel: Paid
+      visits: 9500
+    - month: Mar
+      channel: Paid
+      visits: 11000
+    - month: Apr
+      channel: Paid
+      visits: 10000
+    - month: May
+      channel: Paid
+      visits: 12000
+    - month: Jan
+      channel: Referral
+      visits: 3000
+    - month: Feb
+      channel: Referral
+      visits: 4200
+    - month: Mar
+      channel: Referral
+      visits: 5100
+    - month: Apr
+      channel: Referral
+      visits: 6800
+    - month: May
+      channel: Referral
+      visits: 8500
+encoding:
+  x: { field: month, type: ordinal, title: null }
+  y: { field: visits, type: quantitative, title: Visits }
+  color: { field: channel, type: nominal, title: Channel }

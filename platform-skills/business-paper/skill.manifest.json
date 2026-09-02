@@ -1,0 +1,8 @@
+{
+  "name": "business-paper",
+  "version": "1.0.0",
+  "engines": ["pi-agent"],
+  "toolDeps": [],
+  "risk_class": "readonly",
+  "entry": "SKILL.md"
+}

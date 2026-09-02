@@ -1,0 +1,4 @@
+- Write in markdown. Prefer a short paper over a long essay.
+- Put the primary document at `artifacts/<slug>.md`.
+- Charts go next to the paper using the chart skill.
+- Finish with one `handoff` to a human.

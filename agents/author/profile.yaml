@@ -1,0 +1,34 @@
+id: author
+actor: worker
+runtime: sandbox-docker
+engine: pi-agent
+model:
+  id: gpt-5.4-mini
+  sandbox: workspace-write
+  approvalPolicy: never
+toolsets: []
+skills:
+  mode: named
+  names:
+    - business-paper
+    - chart
+policies:
+  approvalPolicy: never
+  maxTurns: 30
+  turnTimeoutMs: 1800000
+  maxToolCalls: 200
+  maxRuntimeMinutes: 30
+workspaceRetention: delete-on-success
+scopePolicy:
+  allowedRepos: []
+  allowedMountTypes:
+    - git
+  pathDenylist:
+    - "**/.env"
+    - "**/.git/config"
+  maxMountedPaths: 50
+  egressAllowlist: []
+capabilities:
+  - filesystem
+  - shell
+  - handoff

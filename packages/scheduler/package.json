@@ -1,0 +1,33 @@
+{
+  "name": "@remote-sandbox-agents/scheduler",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "run-ticket": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "tsc -b --pretty false && node --test dist/wiring/*.test.js dist/api/*.test.js dist/control/board-snapshots/*.test.js dist/runtime/*.test.js"
+  },
+  "dependencies": {
+    "@remote-sandbox-agents/agent-engines": "0.1.0",
+    "@remote-sandbox-agents/channels": "0.1.0",
+    "@remote-sandbox-agents/contracts": "0.1.0",
+    "@remote-sandbox-agents/orchestrator": "0.1.0",
+    "@remote-sandbox-agents/persistence": "0.1.0",
+    "@remote-sandbox-agents/sandbox": "0.1.0",
+    "@remote-sandbox-agents/shared": "0.1.0",
+    "@remote-sandbox-agents/skills": "0.1.0",
+    "@remote-sandbox-agents/worker": "0.1.0"
+  }
+}

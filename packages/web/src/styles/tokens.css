@@ -1,0 +1,63 @@
+:root {
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: var(--base);
+  font-synthesis: none;
+  text-rendering: geometricPrecision;
+  /* Cool field, warm terracotta accent (Anthropic-adjacent). */
+  --base: #f4f4f6;
+  --surface: #ffffff;
+  --overlay: #e8e8ec;
+  --sidebar: #f0f0f2;
+  --muted: #8a8a93;
+  --text: #3a3a41;
+  --text-muted: var(--muted);
+  --accent: #d4784e;
+  --accent-hover: #c46941;
+  --accent-active: #b35c38;
+  --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+  --on-accent: #ffffff;
+  --border: rgba(40, 42, 54, 0.1);
+  --border-strong: rgba(40, 42, 54, 0.16);
+  --shadow: rgba(28, 32, 48, 0.07);
+  --shadow-strong: rgba(28, 32, 48, 0.14);
+  --column-dot: rgba(40, 42, 54, 0.11);
+  --column-patch: rgba(40, 42, 54, 0.05);
+  --foam: #4f8a82;
+  --pine: #3c6b66;
+  --gold: #b0893a;
+  --love: #c15c5c;
+  --iris: #6b6f80;
+  --foam-soft: color-mix(in srgb, var(--foam) 14%, transparent);
+  --pine-soft: color-mix(in srgb, var(--pine) 14%, transparent);
+  --gold-soft: color-mix(in srgb, var(--gold) 16%, transparent);
+  --love-soft: color-mix(in srgb, var(--love) 14%, transparent);
+  --iris-soft: color-mix(in srgb, var(--iris) 14%, transparent);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 1080px;
+  min-height: 100vh;
+}
+
+button,
+select,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

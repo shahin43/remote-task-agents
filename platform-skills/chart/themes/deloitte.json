@@ -1,0 +1,20 @@
+{
+  "name": "deloitte",
+  "font": "system-ui, -apple-system, sans-serif",
+  "primaryColor": "#86BC25",
+  "categoryPalette": ["#86BC25", "#0076A8", "#00A3E0", "#43B02A", "#005587", "#62B5E5"],
+  "variants": {
+    "light": {
+      "text": "#1a1a1a",
+      "textLight": "#555555",
+      "divider": "#dde6d4",
+      "bgGray": "#f5f8f2"
+    },
+    "dark": {
+      "text": "#eef2e8",
+      "textLight": "#99aa88",
+      "divider": "#3a4434",
+      "bgGray": "#1c2218"
+    }
+  }
+}

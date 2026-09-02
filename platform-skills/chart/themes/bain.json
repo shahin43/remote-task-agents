@@ -1,0 +1,20 @@
+{
+  "name": "bain",
+  "font": "system-ui, -apple-system, sans-serif",
+  "primaryColor": "#CC0000",
+  "categoryPalette": ["#CC0000", "#333333", "#888888", "#CC6666", "#666666", "#CCCCCC"],
+  "variants": {
+    "light": {
+      "text": "#1a1a1a",
+      "textLight": "#555555",
+      "divider": "#e0e0e0",
+      "bgGray": "#f5f5f5"
+    },
+    "dark": {
+      "text": "#f0f0f0",
+      "textLight": "#aaaaaa",
+      "divider": "#444444",
+      "bgGray": "#2a2a2a"
+    }
+  }
+}

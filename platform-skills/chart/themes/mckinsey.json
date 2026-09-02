@@ -1,0 +1,20 @@
+{
+  "name": "mckinsey",
+  "font": "system-ui, -apple-system, sans-serif",
+  "primaryColor": "#1c3cdf",
+  "categoryPalette": ["#1c3cdf", "#4ba6ee", "#051c2c", "#7fb8e0", "#2d5fa0", "#a8d0ef"],
+  "variants": {
+    "light": {
+      "text": "#051c2c",
+      "textLight": "#4a5568",
+      "divider": "#d8dfe6",
+      "bgGray": "#f4f6f8"
+    },
+    "dark": {
+      "text": "#e8edf2",
+      "textLight": "#94a3b8",
+      "divider": "#3a4a5c",
+      "bgGray": "#1a2634"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "references": [
+    { "path": "../agent-engines" },
+    { "path": "../channels" },
+    { "path": "../contracts" },
+    { "path": "../orchestrator" },
+    { "path": "../persistence" },
+    { "path": "../sandbox" },
+    { "path": "../shared" },
+    { "path": "../skills" },
+    { "path": "../worker" }
+  ],
+  "include": ["src/**/*.ts"]
+}

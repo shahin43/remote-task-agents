@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Relay8 — Brand Naming Strategy for the Open-Source Launch</title>
+  <style>
+    :root { --bg:#f3f0e8; --paper:#fffdf8; --ink:#1e252b; --muted:#69727a; --line:#d9d5ca; --navy:#132b3d; --teal:#177b7a; --mint:#bfe3b5; --orange:#d97349; --red:#9f4542; --green:#46725a; --radius:18px; --shadow:0 18px 55px rgba(19,43,61,.12); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:radial-gradient(circle at 82% 0,rgba(23,123,122,.15),transparent 27rem),var(--bg); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.55; }
+    a { color:#116c72; text-underline-offset:3px; }
+    code { font-family:"SFMono-Regular",Consolas,monospace; }
+    .wrap { width:min(1120px,calc(100% - 32px)); margin:0 auto; }
+    .topbar { position:sticky; top:0; z-index:20; background:rgba(243,240,232,.9); border-bottom:1px solid rgba(19,43,61,.13); backdrop-filter:blur(14px); }
+    .topbar-inner { min-height:58px; display:flex; align-items:center; gap:18px; }
+    .brand { margin-right:auto; display:flex; align-items:center; gap:10px; font-weight:850; }
+    .mark { width:32px; height:32px; display:grid; place-items:center; border-radius:10px; color:var(--navy); background:var(--mint); font-weight:950; }
+    nav { display:flex; gap:16px; overflow-x:auto; white-space:nowrap; font-size:12px; }
+    nav a { color:var(--muted); text-decoration:none; }
+    .print { border:1px solid var(--line); border-radius:999px; padding:7px 12px; background:var(--paper); cursor:pointer; }
+    .hero { padding:74px 0 48px; }
+    .eyebrow { color:var(--teal); font-size:12px; font-weight:850; letter-spacing:.15em; text-transform:uppercase; }
+    h1,h2 { font-family:Georgia,"Times New Roman",serif; letter-spacing:-.035em; }
+    h1 { margin:12px 0 18px; font-size:clamp(58px,11vw,122px); line-height:.88; }
+    h2 { margin:0; font-size:clamp(31px,4.4vw,50px); line-height:1.08; }
+    h3 { margin:0 0 8px; font-size:18px; }
+    .lead { max-width:790px; color:#4f5b64; font-size:clamp(18px,2.2vw,24px); }
+    .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:25px; }
+    .chip { border:1px solid var(--line); border-radius:999px; padding:7px 11px; background:rgba(255,253,248,.85); font-size:11px; font-weight:780; }
+    section { padding:38px 0; scroll-margin-top:73px; }
+    .section-head { display:grid; grid-template-columns:1fr minmax(280px,480px); gap:30px; align-items:end; margin-bottom:23px; }
+    .section-head p,.muted { color:var(--muted); }
+    .grid { display:grid; gap:16px; }
+    .grid > * { min-width:0; }
+    .grid-3 { grid-template-columns:repeat(3,1fr); }
+    .grid-2 { grid-template-columns:repeat(2,1fr); }
+    .card { padding:22px; border:1px solid var(--line); border-radius:var(--radius); background:rgba(255,253,248,.94); box-shadow:0 6px 22px rgba(19,43,61,.055); }
+    .winner { padding:0; overflow:hidden; border:0; color:white; background:var(--navy); box-shadow:var(--shadow); }
+    .winner-inner { display:grid; grid-template-columns:1.35fr .8fr; }
+    .winner-copy { padding:clamp(30px,5vw,55px); }
+    .winner-copy h2 { font-size:clamp(45px,7vw,78px); }
+    .winner-copy p { color:#cbd8df; font-size:18px; }
+    .winner-side { padding:34px 30px; background:linear-gradient(150deg,rgba(23,123,122,.34),rgba(191,227,181,.14)); }
+    .winner-side dl { margin:18px 0 0; }
+    .winner-side dt { margin-top:14px; color:#a9c5cd; font-size:10px; text-transform:uppercase; letter-spacing:.09em; }
+    .winner-side dd { margin:3px 0 0; font-weight:750; }
+    .tag { display:inline-block; border-radius:999px; padding:4px 8px; font-size:10px; font-weight:850; letter-spacing:.075em; text-transform:uppercase; }
+    .tag.win { color:#28543a; background:#d9ebd7; }
+    .tag.good { color:#285967; background:#d8eaee; }
+    .tag.watch { color:#76531d; background:#f1e4c5; }
+    .tag.avoid { color:#7b3733; background:#f1d9d5; }
+    .name { display:block; margin:13px 0 8px; font:700 31px Georgia,serif; }
+    .score { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:16px; }
+    .score div { padding:9px 6px; border-radius:10px; background:#eef0eb; text-align:center; }
+    .score b { display:block; }
+    .score small { color:var(--muted); font-size:8px; text-transform:uppercase; letter-spacing:.06em; }
+    table { width:100%; border-collapse:collapse; font-size:12px; }
+    th,td { padding:13px 11px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line); }
+    th { color:var(--muted); background:#efefe9; font-size:9px; text-transform:uppercase; letter-spacing:.08em; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper); }
+    .architecture { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    .architecture div { min-height:145px; border-radius:15px; padding:18px; background:var(--paper); border:1px solid var(--line); }
+    .architecture b { display:block; margin-bottom:8px; }
+    .architecture small { color:var(--muted); }
+    .pillars { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    .pillar { min-height:190px; position:relative; overflow:hidden; border-radius:16px; padding:20px; color:white; background:var(--navy); }
+    .pillar::after { content:attr(data-letter); position:absolute; right:-4px; bottom:-47px; color:rgba(191,227,181,.11); font:900 125px Georgia,serif; }
+    .pillar b { display:block; margin-bottom:9px; color:var(--mint); font-size:16px; }
+    .pillar p { position:relative; z-index:1; color:#d5e0e5; font-size:13px; }
+    .avoid-list { padding-left:18px; color:#4e5961; }
+    .avoid-list li { margin:8px 0; }
+    .callout { border-left:5px solid var(--teal); border-radius:0 14px 14px 0; padding:18px 21px; background:#deeeea; }
+    .warning { border-left-color:var(--orange); background:#f2e5dc; }
+    .launch-line { padding:24px; border-radius:16px; color:white; background:linear-gradient(130deg,var(--teal),#15516a); }
+    .launch-line strong { display:block; font:700 24px Georgia,serif; }
+    .launch-line span { color:#d8e8e8; }
+    .checklist { counter-reset:item; list-style:none; padding:0; }
+    .checklist li { position:relative; padding:0 0 15px 42px; }
+    .checklist li::before { counter-increment:item; content:counter(item); position:absolute; left:0; top:0; width:27px; height:27px; display:grid; place-items:center; border-radius:9px; color:white; background:var(--teal); font-size:11px; font-weight:850; }
+    footer { margin-top:38px; padding:36px 0 50px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; }
+    @media(max-width:900px){ .grid-3{grid-template-columns:repeat(2,1fr)} .winner-inner{grid-template-columns:1fr} .architecture,.pillars{grid-template-columns:1fr 1fr} }
+    @media(max-width:680px){ .topbar-inner{flex-wrap:wrap;align-items:flex-start;padding:10px 0} nav{order:3;width:100%;padding-bottom:3px} .hero{padding-top:50px} .section-head,.grid-3,.grid-2,.architecture,.pillars{grid-template-columns:1fr} .score{grid-template-columns:1fr 1fr} }
+    @media print{ body{background:white}.topbar{display:none}.wrap{width:100%}.card,.winner{break-inside:avoid;box-shadow:none}a{color:inherit;text-decoration:none} }
+  </style>
+</head>
+<body>
+  <div class="topbar"><div class="wrap topbar-inner"><div class="brand"><span class="mark">R8</span><span>Open-Source Naming Brief</span></div><nav><a href="#decision">Decision</a><a href="#shortlist">Shortlist</a><a href="#architecture">Architecture</a><a href="#avoid">Avoid</a><a href="#launch">Launch</a></nav><button class="print" onclick="window.print()">Print / PDF</button></div></div>
+  <header class="hero wrap"><div class="eyebrow">Brand naming research · 31 August 2026</div><h1>Relay8</h1><p class="lead">A short, memorable product name that connects agent handoffs, board movement, human review, and the Ennov8 foundation—without sounding like another generic chatbot or orchestration framework.</p><div class="chips"><span class="chip">Pronounced “relay eight”</span><span class="chip">Mnemonic: “relay it”</span><span class="chip">Six characters</span><span class="chip">OSS + cloud extensible</span></div></header>
+
+  <main>
+    <section id="decision" class="wrap">
+      <article class="card winner"><div class="winner-inner"><div class="winner-copy"><div class="eyebrow" style="color:var(--mint)">Recommended launch brand</div><h2>Relay8</h2><p>The product relays accountable work from human to agent, agent to agent, and back to a reviewer. The “8” provides a subtle Ennov8 signature while letting the project stand independently in GitHub, package names, documentation, and future hosted editions.</p><div class="launch-line"><strong>Governed agent work, delivered.</strong><span>The open agent delivery control plane.</span></div></div><aside class="winner-side"><span class="tag win">Best overall</span><dl><dt>Product</dt><dd>Relay8</dd><dt>Endorsement</dt><dd>by Ennov8</dd><dt>Open source</dt><dd>Relay8 Core</dd><dt>Hosted</dt><dd>Relay8 Cloud</dd><dt>Commercial</dt><dd>Relay8 Enterprise</dd><dt>Workflow content</dt><dd>Relay8 Packs</dd></dl></aside></div></article>
+      <div class="callout warning" style="margin-top:18px"><strong>Preliminary screen only:</strong> general web research found Relay8 references mainly in physical relay-board documentation, not a prominent adjacent AI-agent software brand. Domain, package, company-name, and trademark availability have not been legally cleared.</div>
+    </section>
+
+    <section class="wrap"><div class="section-head"><h2>The Relay8 GRID</h2><p>Use the four objectives as a product doctrine. GRID is memorable, operational, and broad enough to guide architecture, positioning, roadmap decisions, and customer proof.</p></div>
+      <div class="pillars">
+        <article class="pillar" data-letter="G"><b>Governed by policy</b><p>Identity, scope, approvals, budgets, and external effects are controlled by the platform—not improvised by the model.</p></article>
+        <article class="pillar" data-letter="R"><b>Reliable by design</b><p>Isolated attempts, durable state, idempotent commands, recovery, verification, and explicit terminal outcomes.</p></article>
+        <article class="pillar" data-letter="I"><b>Integrated across the work</b><p>Agents, models, repositories, tools, channels, sandboxes, and customer workflows connect through typed seams.</p></article>
+        <article class="pillar" data-letter="D"><b>Delivery measured by outcomes</b><p>Track accepted deliverables, quality, rework, review time, duration, tokens, cost, policy decisions, and business value.</p></article>
+      </div>
+      <div class="grid grid-3" style="margin-top:16px">
+        <article class="card"><span class="tag win">Primary tagline</span><h3>Governed agent work, delivered.</h3><p>Short, product-oriented, and suitable beneath the Relay8 wordmark.</p></article>
+        <article class="card"><span class="tag good">Market promise</span><h3>Reliable execution. Measurable delivery.</h3><p>Best for enterprise and buyer-facing pages where operational confidence matters.</p></article>
+        <article class="card"><span class="tag good">Expanded line</span><h3>Reliable by design. Governed by policy. Integrated for work. Measured by outcome.</h3><p>Best for architecture, launch posts, README copy, and sales material.</p></article>
+      </div>
+      <div class="callout" style="margin-top:16px"><strong>One-sentence positioning:</strong> Relay8 is the open agent delivery control plane for reliable execution, governed access, integrated workflows, and measurable outcomes.</div>
+    </section>
+
+    <section id="shortlist" class="wrap"><div class="section-head"><h2>Ranked naming shortlist</h2><p>Scores balance relevance, memorability, distinctiveness, parent-brand fit, and room to expand beyond coding agents.</p></div>
+      <div class="grid grid-3">
+        <article class="card"><span class="tag win">#1 recommended</span><span class="name">Relay8</span><p>Best mix of motion, handoff, coordination, and Ennov8 linkage. Short enough for a CLI and recognizable enough for a commercial platform.</p><div class="score"><div><b>9.2</b><small>Memory</small></div><div><b>9.0</b><small>Relevance</small></div><div><b>8.4</b><small>Distinct</small></div><div><b>9.5</b><small>Family</small></div></div></article>
+        <article class="card"><span class="tag good">#2 parent-led</span><span class="name">Ennov8 Relay</span><p>Clearer ownership and enterprise tone. Better if Ennov8 already has strong equity, but longer and exposed to confusion with the existing Enov8 IT-control company.</p><div class="score"><div><b>8.2</b><small>Memory</small></div><div><b>9.0</b><small>Relevance</small></div><div><b>7.2</b><small>Distinct</small></div><div><b>10</b><small>Family</small></div></div></article>
+        <article class="card"><span class="tag good">#3 trust-led</span><span class="name">Ennov8 Steward</span><p>Signals governance, human authority, and responsible operation. Strong enterprise option, though less energetic and less obviously related to a Kanban/work delivery product.</p><div class="score"><div><b>7.6</b><small>Memory</small></div><div><b>7.7</b><small>Relevance</small></div><div><b>7.7</b><small>Distinct</small></div><div><b>9.4</b><small>Family</small></div></div></article>
+        <article class="card"><span class="tag watch">#4 builder-led</span><span class="name">Ennov8 Forge</span><p>Good open-source energy and artifact creation story. The “Forge/Forge8” territory is already heavily occupied across AI, developer, and automation products.</p><div class="score"><div><b>8.0</b><small>Memory</small></div><div><b>7.6</b><small>Relevance</small></div><div><b>5.5</b><small>Distinct</small></div><div><b>9.0</b><small>Family</small></div></div></article>
+        <article class="card"><span class="tag watch">#5 abstract</span><span class="name">Kordane</span><p>A coined standalone name that can suggest coordination and lanes. Initial search found a software consultancy with the name, and the meaning requires more explanation.</p><div class="score"><div><b>7.4</b><small>Memory</small></div><div><b>5.8</b><small>Relevance</small></div><div><b>6.5</b><small>Distinct</small></div><div><b>5.0</b><small>Family</small></div></div></article>
+        <article class="card"><span class="tag watch">#6 low clarity</span><span class="name">Runory</span><p>A coined “run + story” direction: every execution leaves a record. Initial search showed low adjacent software usage, but pronunciation and spelling are not immediately obvious.</p><div class="score"><div><b>6.5</b><small>Memory</small></div><div><b>6.0</b><small>Relevance</small></div><div><b>8.0</b><small>Distinct</small></div><div><b>4.5</b><small>Family</small></div></div></article>
+      </div>
+    </section>
+
+    <section id="architecture" class="wrap"><div class="section-head"><h2>Recommended brand architecture</h2><p>Keep one memorable root and use descriptors for editions. Avoid inventing a different brand for every technical package.</p></div>
+      <div class="architecture"><div><b>Relay8 Core</b><small>Apache-2.0 open-source board, sessions, worker, sandbox, snapshots, artifacts, and local deployment.</small></div><div><b>Relay8 Cloud</b><small>Managed workspaces, provisioning, backups, upgrades, integrations, and operational support.</small></div><div><b>Relay8 Enterprise</b><small>SSO, tenancy, policy, audit, remote execution, client workrooms, budgets, and SLAs.</small></div><div><b>Relay8 Packs</b><small>Versioned workflow/profile/skill packs for engineering change, research delivery, QA, and later verticals.</small></div></div>
+      <div class="grid grid-2" style="margin-top:16px"><article class="card"><h3>Developer surfaces</h3><p><code>github.com/ennov8/relay8</code><br><code>@relay8/contracts</code><br><code>@relay8/sandbox</code><br><code>relay8 start</code></p><p class="muted">Illustrative only; namespace availability must be checked before publishing.</p></article><article class="card"><h3>Public language</h3><p><strong>Name:</strong> Relay8<br><strong>Endorsement:</strong> by Ennov8<br><strong>Category:</strong> Open Agent Delivery Control Plane<br><strong>Tagline:</strong> Governed agent work, delivered.</p></article></div>
+    </section>
+
+    <section id="avoid" class="wrap"><div class="section-head"><h2>Names and territories to avoid</h2><p>The adjacent category became crowded quickly. Several attractive names now have direct conflicts with highly similar AI products.</p></div>
+      <div class="table-wrap"><table><thead><tr><th>Name</th><th>Why to avoid</th><th>Evidence</th></tr></thead><tbody>
+        <tr><td><strong>Hermes Agents</strong></td><td>Hermes Agent is already a prominent open-source agent platform from Nous Research; “Hermes” also has extensive non-AI trademark use.</td><td><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a></td></tr>
+        <tr><td><strong>Mission Control / MissionControlHQ</strong></td><td>Directly copies the category language and an active competitor; difficult to own in search or conversation.</td><td><a href="https://missioncontrolhq.ai/">MissionControlHQ</a></td></tr>
+        <tr><td><strong>Workcell</strong></td><td>A highly adjacent product already markets isolated, reviewable cloud workspaces as a control plane for AI coding agents.</td><td><a href="https://workcell.dev/">workcell.dev</a></td></tr>
+        <tr><td><strong>TaskLoom</strong></td><td>An active AI coding-agent Kanban/board product uses this exact name and positioning.</td><td><a href="https://taskloom.app/">TaskLoom</a></td></tr>
+        <tr><td><strong>Runstead</strong></td><td>An open-source “control plane for governed AI work” already occupies nearly the same conceptual space.</td><td><a href="https://github.com/runstead/runstead">Runstead</a></td></tr>
+        <tr><td><strong>Prooflane / AgentShip / AgentRelay</strong></td><td>All are active AI assurance, agent workspace, or agent messaging brands in closely adjacent markets.</td><td><a href="https://prooflane.ai/">Prooflane</a> · <a href="https://agentship.app/">AgentShip</a> · <a href="https://agentrelay.com/docs/introduction">Agent Relay</a></td></tr>
+        <tr><td><strong>Ennov8 Control Tower</strong></td><td>Enov8—one “n” fewer—already calls itself an AI &amp; SDLC Control Tower for enterprise IT. High phonetic and category confusion.</td><td><a href="https://www.enov8.com/company/">Enov8</a></td></tr>
+        <tr><td><strong>Orchestr8 / Deleg8 / Forge8</strong></td><td>Each is already used by active AI, automation, platform, or software brands. The “verb + 8” pattern alone is not ownable.</td><td><a href="https://orchestr8.ai/">Orchestr8</a> · <a href="https://www.deleg8.io/">Deleg8</a> · <a href="https://www.forge8.in/">Forge8</a></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section id="launch" class="wrap"><div class="section-head"><h2>How Relay8 sounds in market</h2><p>The test of a name is whether it remains natural in documentation, sales, community conversation, and product editions.</p></div>
+      <div class="grid grid-3"><div class="launch-line"><strong>Relay8</strong><span>Governed agent work, delivered.</span></div><div class="launch-line"><strong>Relay8 Core</strong><span>Run the open agent delivery control plane locally.</span></div><div class="launch-line"><strong>Relay8 Enterprise</strong><span>Isolated agent delivery across teams and clients.</span></div></div>
+      <div class="grid grid-2" style="margin-top:16px"><article class="card"><h3>Homepage hero</h3><p><strong>Delegate real work to agents without losing control.</strong></p><p>Relay8 gives every agent task an isolated workspace, a durable run record, and a reviewable delivery package.</p></article><article class="card"><h3>Open-source repository</h3><p><strong>Relay8 is the open agent delivery control plane.</strong></p><p>Board task → scoped worker → isolated sandbox → snapshot, artifacts, usage, and human handoff.</p></article></div>
+    </section>
+
+    <section class="wrap"><div class="section-head"><h2>Clearance before announcement</h2><p>A web screen reduces obvious mistakes; it does not establish legal availability or ownership.</p></div><ol class="checklist"><li><strong>Registrar and handle check:</strong> verify candidate domains, GitHub organization/repository, npm/PyPI/crates/container namespaces, and social handles.</li><li><strong>Trademark search:</strong> engage counsel to search UKIPO, EUIPO, USPTO, WIPO, Companies House and relevant common-law use—especially Nice Classes 9, 42 and possibly 35.</li><li><strong>Phonetic/confusion review:</strong> assess Relay8 alongside Relay, 8Relay hardware, Ennov8 and Enov8—not only exact spelling.</li><li><strong>Customer pronunciation test:</strong> show the name verbally to 10 target buyers; ask them to spell it, recall it a day later, and describe what they expect it does.</li><li><strong>Community package reservation:</strong> reserve namespaces only after legal review; publish a placeholder README and security contact before launch.</li><li><strong>Brand lock:</strong> approve word mark, logo mark, capitalization, tagline, edition naming, category descriptor, and migration from <code>remote-sandbox-agents</code>.</li></ol>
+      <div class="callout warning"><strong>Recommended decision gate:</strong> shortlist Relay8, Ennov8 Relay, and Ennov8 Steward; complete legal/domain/package clearance; then choose one. If Relay8 clears, it is the strongest launch brand from this review.</div>
+    </section>
+  </main>
+  <footer><div class="wrap"><strong>Research context</strong><p>Prepared 2026-08-31 from current product positioning and preliminary web collision screening. This is naming strategy, not trademark legal advice.</p><p><a href="market-research-and-gtm-2026.html">Market research &amp; GTM</a> · <a href="service-state-and-roadmap.html">Service state &amp; roadmap</a> · <a href="../README.md">Repository README</a></p></div></footer>
+</body>
+</html>

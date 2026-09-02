@@ -1,0 +1,35 @@
+title: Revenue by Region
+mark: bar
+data:
+  values:
+    - quarter: Q1
+      region: EMEA
+      revenue: 48000
+    - quarter: Q1
+      region: APAC
+      revenue: 32000
+    - quarter: Q1
+      region: Americas
+      revenue: 40000
+    - quarter: Q2
+      region: EMEA
+      revenue: 62000
+    - quarter: Q2
+      region: APAC
+      revenue: 45000
+    - quarter: Q2
+      region: Americas
+      revenue: 78000
+    - quarter: Q3
+      region: EMEA
+      revenue: 71000
+    - quarter: Q3
+      region: APAC
+      revenue: 52000
+    - quarter: Q3
+      region: Americas
+      revenue: 87000
+encoding:
+  x: { field: quarter, type: ordinal, title: null }
+  y: { field: revenue, type: quantitative, title: "Revenue ($)" }
+  color: { field: region, type: nominal, title: Region }

@@ -1,0 +1,20 @@
+{
+  "name": "economist",
+  "font": "system-ui, -apple-system, sans-serif",
+  "primaryColor": "#E3120B",
+  "categoryPalette": ["#E3120B", "#0D6AB0", "#2A9D8F", "#E9C46A", "#264653", "#F4A261"],
+  "variants": {
+    "light": {
+      "text": "#1d1d1d",
+      "textLight": "#636363",
+      "divider": "#e0e0e0",
+      "bgGray": "#f7f5f2"
+    },
+    "dark": {
+      "text": "#ededed",
+      "textLight": "#a0a0a0",
+      "divider": "#484848",
+      "bgGray": "#282420"
+    }
+  }
+}

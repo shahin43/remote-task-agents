@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Remote Sandbox Agents — Market Research, Positioning & GTM Strategy</title>
+  <style>
+    :root {
+      --bg: #f2f0eb;
+      --paper: #fbfaf7;
+      --ink: #182029;
+      --muted: #69737c;
+      --line: #d8d8d2;
+      --navy: #14283a;
+      --blue: #176b87;
+      --cyan: #2aa6a4;
+      --lime: #c8df72;
+      --orange: #dc7048;
+      --red: #a94d48;
+      --green: #4c7960;
+      --shadow: 0 18px 52px rgba(20,40,58,.11);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 87% 2%, rgba(42,166,164,.17), transparent 27rem),
+        radial-gradient(circle at 5% 18%, rgba(200,223,114,.18), transparent 25rem),
+        var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.56;
+    }
+    a { color: #0c6682; text-underline-offset: 3px; }
+    code { font-family: "SFMono-Regular", Consolas, monospace; font-size: .92em; }
+    .wrap { width: min(1210px, calc(100% - 32px)); margin: 0 auto; }
+    .topbar { position: sticky; top: 0; z-index: 30; background: rgba(242,240,235,.9); border-bottom: 1px solid rgba(20,40,58,.12); backdrop-filter: blur(15px); }
+    .topbar-inner { min-height: 60px; display: flex; align-items: center; gap: 18px; }
+    .brand { margin-right: auto; display: flex; align-items: center; gap: 10px; font-weight: 820; }
+    .brand-mark { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 10px; color: var(--navy); background: var(--lime); font-weight: 900; }
+    nav { display: flex; gap: 16px; overflow-x: auto; white-space: nowrap; font-size: 12px; }
+    nav a { color: var(--muted); text-decoration: none; }
+    nav a:hover { color: var(--blue); }
+    .print { padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); cursor: pointer; color: var(--ink); }
+    .hero { padding: 74px 0 48px; }
+    .eyebrow { color: var(--blue); font-size: 12px; font-weight: 850; text-transform: uppercase; letter-spacing: .15em; }
+    h1, h2 { font-family: Georgia, "Times New Roman", serif; letter-spacing: -.035em; }
+    h1 { max-width: 1010px; margin: 13px 0 20px; font-size: clamp(44px, 7.2vw, 82px); line-height: .98; }
+    h2 { margin: 0; font-size: clamp(31px, 4.3vw, 50px); line-height: 1.08; }
+    h3 { margin: 0 0 9px; font-size: 17px; }
+    .lead { max-width: 870px; color: #4e5a64; font-size: clamp(18px, 2.1vw, 24px); }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+    .badge { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 999px; padding: 7px 11px; background: rgba(251,250,247,.82); font-size: 11px; font-weight: 790; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); }
+    section { padding: 39px 0; scroll-margin-top: 75px; }
+    .section-head { display: grid; grid-template-columns: 1fr minmax(300px, 520px); gap: 34px; align-items: end; margin-bottom: 24px; }
+    .section-head p, .muted { color: var(--muted); }
+    .grid { display: grid; gap: 16px; }
+    .grid > * { min-width: 0; }
+    .competitor, .competitor p, .competitor a { overflow-wrap: anywhere; }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .card { background: rgba(251,250,247,.93); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: 0 6px 22px rgba(20,40,58,.055); }
+    .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+    .metric { display: block; margin: 9px 0 7px; font-family: Georgia, serif; font-size: 34px; line-height: 1; }
+    .kicker { color: var(--muted); font-size: 10px; font-weight: 850; text-transform: uppercase; letter-spacing: .1em; }
+    .tag { display: inline-block; border-radius: 999px; padding: 4px 8px; font-size: 10px; font-weight: 850; letter-spacing: .075em; text-transform: uppercase; }
+    .tag.direct { color: #235568; background: #d7edf0; }
+    .tag.benchmark { color: #6a591b; background: #edf1cc; }
+    .tag.control { color: #4c446d; background: #e4e0f0; }
+    .tag.vertical { color: #734630; background: #f1dfd2; }
+    .tag.win { color: #2f5c42; background: #dcebdc; }
+    .tag.risk { color: #7f3733; background: #f1d9d6; }
+    .source { font-size: 11px; color: var(--muted); }
+    .source a { color: inherit; }
+
+    .recommendation { overflow: hidden; padding: 0; background: var(--navy); color: white; border: 0; box-shadow: var(--shadow); }
+    .recommendation-inner { display: grid; grid-template-columns: 1.45fr .85fr; }
+    .recommendation-copy { padding: clamp(28px, 5vw, 54px); }
+    .recommendation-copy h2 { max-width: 780px; }
+    .recommendation-copy p { color: #cdd9e0; font-size: 18px; }
+    .position-statement { margin-top: 26px; border-left: 5px solid var(--lime); padding: 17px 20px; background: rgba(255,255,255,.07); font: 700 clamp(18px,2.2vw,27px)/1.42 Georgia, serif; }
+    .recommendation-side { padding: 36px 30px; background: linear-gradient(150deg, rgba(42,166,164,.28), rgba(200,223,114,.12)); }
+    .recommendation-side ol { padding-left: 20px; }
+    .recommendation-side li { margin: 13px 0; color: #e2ecef; }
+
+    .landscape { display: grid; grid-template-columns: 190px 1fr; gap: 12px; }
+    .lane-label { border-radius: 15px; padding: 18px; color: white; background: var(--navy); }
+    .lane-label strong { display: block; margin-bottom: 6px; }
+    .lane-label small { color: #c9d7de; }
+    .lane-products { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .mini { min-height: 135px; padding: 16px; border: 1px solid var(--line); border-radius: 15px; background: var(--paper); }
+    .mini b { display: block; margin-bottom: 6px; }
+    .mini p { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .table-wrap { overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { padding: 13px 11px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; background: #f0f0ea; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .yes { color: var(--green); font-weight: 800; }
+    .no { color: var(--red); font-weight: 800; }
+    .partial { color: #916322; font-weight: 800; }
+
+    .option { position: relative; padding-top: 54px; }
+    .option-number { position: absolute; top: 18px; left: 22px; color: var(--blue); font: 700 25px Georgia, serif; }
+    .score { display: grid; grid-template-columns: repeat(4,1fr); gap: 7px; margin-top: 17px; }
+    .score div { padding: 9px; border-radius: 10px; background: #eef0ec; text-align: center; }
+    .score b { display: block; font-size: 16px; }
+    .score small { color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .06em; }
+    .option.recommended { border: 2px solid var(--cyan); box-shadow: 0 14px 38px rgba(42,166,164,.15); }
+
+    .usp { min-height: 210px; position: relative; overflow: hidden; }
+    .usp::after { content: attr(data-number); position: absolute; right: -5px; bottom: -45px; color: rgba(23,107,135,.08); font: 900 120px Georgia, serif; }
+    .usp ul, .gap-card ul { padding-left: 18px; color: #4e5a64; }
+    .usp li, .gap-card li { margin: 6px 0; }
+
+    .filterbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .filterbar button { border: 1px solid var(--line); border-radius: 999px; padding: 8px 13px; background: var(--paper); color: var(--muted); cursor: pointer; font-weight: 750; }
+    .filterbar button.active { color: white; border-color: var(--blue); background: var(--blue); }
+    .competitor.hidden { display: none; }
+
+    .gap-card { position: relative; padding-left: 66px; }
+    .gap-id { position: absolute; left: 20px; top: 22px; color: var(--orange); font: 700 20px Georgia, serif; }
+    .priority-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 13px; }
+
+    .roadmap { position: relative; }
+    .roadmap::before { content: ""; position: absolute; left: 21px; top: 30px; bottom: 30px; width: 2px; background: #bdc8ca; }
+    .roadmap-item { position: relative; margin: 0 0 14px 52px; }
+    .roadmap-item::before { content: ""; position: absolute; left: -38px; top: 27px; width: 14px; height: 14px; border: 4px solid var(--bg); border-radius: 50%; background: var(--cyan); box-shadow: 0 0 0 1px var(--cyan); }
+    .roadmap-item h3 { font-size: 20px; }
+
+    .callout { border-left: 5px solid var(--cyan); border-radius: 0 14px 14px 0; padding: 19px 22px; background: #dfeeed; }
+    .warning { border-left-color: var(--orange); background: #f2e7de; }
+    .callout strong { color: var(--navy); }
+    .source-list { columns: 2; column-gap: 34px; padding-left: 20px; }
+    .source-list li { break-inside: avoid; margin: 0 0 10px; font-size: 12px; }
+    footer { margin-top: 42px; padding: 38px 0 54px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+
+    @media (max-width: 1000px) {
+      .grid-4, .grid-3 { grid-template-columns: repeat(2,1fr); }
+      .recommendation-inner { grid-template-columns: 1fr; }
+      .lane-products { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .topbar-inner { flex-wrap: wrap; align-items: flex-start; padding: 10px 0; }
+      nav { order: 3; width: 100%; padding-bottom: 3px; }
+      .hero { padding-top: 50px; }
+      .section-head, .grid-4, .grid-3, .grid-2, .landscape { grid-template-columns: 1fr; }
+      .lane-products { grid-template-columns: 1fr; }
+      .score { grid-template-columns: 1fr 1fr; }
+      .source-list { columns: 1; }
+    }
+    @media print {
+      body { background: white; }
+      .topbar, .filterbar { display: none; }
+      .wrap { width: 100%; }
+      section, .card, .mini { break-inside: avoid; box-shadow: none; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand"><span class="brand-mark">M</span><span>Market &amp; Positioning Brief</span></div>
+      <nav aria-label="Report sections">
+        <a href="#answer">Answer</a><a href="#signals">Market</a><a href="#landscape">Landscape</a><a href="#options">Options</a><a href="#gaps">Gaps</a><a href="#gtm">GTM</a><a href="#sources">Sources</a>
+      </nav>
+      <button class="print" onclick="window.print()">Print / PDF</button>
+    </div>
+  </div>
+
+  <header class="hero wrap">
+    <div class="eyebrow">CPO market research · 30 August 2026</div>
+    <h1>Own the accountable delivery layer—not the “AI employee” label.</h1>
+    <p class="lead">Competitive analysis of MissionControlHQ, Grok Bot, Owner.com, horizontal AI workforces, vertical agent platforms, and enterprise control towers—with a recommended wedge and go-to-market strategy for Remote Sandbox Agents.</p>
+    <div class="hero-badges">
+      <span class="badge"><span class="dot"></span> 15 primary product sources</span>
+      <span class="badge"><span class="dot"></span> 3 market categories compared</span>
+      <span class="badge"><span class="dot"></span> 4 positioning options</span>
+      <span class="badge"><span class="dot"></span> Recommended vertical beachhead</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="answer" class="wrap">
+      <article class="card recommendation">
+        <div class="recommendation-inner">
+          <div class="recommendation-copy">
+            <div class="eyebrow" style="color:var(--lime)">Recommended position</div>
+            <h2>The governed agent delivery control plane for client-facing technical work.</h2>
+            <p>Keep the core engine horizontal and open source. Enter the market through software agencies, consultancies, managed service providers, and enterprise delivery teams that need AI agents to produce code, research, documents, and operational evidence for a customer or accountable stakeholder.</p>
+            <div class="position-statement">For teams delegating real client or product work to AI agents, Remote Sandbox Agents turns every request into an isolated, reviewable work order—with diffs, artifacts, approvals, handoffs, usage, and a durable record across models and runtimes.</div>
+          </div>
+          <aside class="recommendation-side">
+            <span class="tag win">Why this wedge</span>
+            <ol>
+              <li>Uses capabilities already present: board, sandbox attempts, snapshots, artifacts, handoff, review.</li>
+              <li>Avoids the crowded generic assistant and customer-support markets.</li>
+              <li>Creates an enterprise story around evidence, isolation, and accountable delivery.</li>
+              <li>Supports open-source adoption plus paid governance, hosting, and client collaboration.</li>
+            </ol>
+          </aside>
+        </div>
+      </article>
+      <div class="callout warning" style="margin-top:18px"><strong>Name clarification:</strong> the supplied link is <a href="https://www.owner.com/">Owner.com</a>, a restaurant growth/ordering platform—not a four-industry agent orchestrator. This report treats Owner as a vertical go-to-market benchmark. If a different “Honour” product was intended, it should be assessed separately.</div>
+    </section>
+
+    <section id="signals" class="wrap">
+      <div class="section-head"><h2>Market signal: adoption is rising faster than trust</h2><p>The market is moving from agent demos to production operations. The bottleneck is becoming reliability, governance, integration, and measurable value—the exact territory where a task-and-attempt control plane can compete.</p></div>
+      <div class="grid grid-4">
+        <article class="card"><span class="kicker">Production adoption</span><span class="metric">57.3%</span><p class="muted">of LangChain survey respondents reported agents in production; quality was the leading barrier and observability was nearly universal.</p><p class="source"><a href="https://www.langchain.com/state-of-agent-engineering">LangChain, 1,340 respondents</a></p></article>
+        <article class="card"><span class="kicker">Enterprise scaling</span><span class="metric">23%</span><p class="muted">reported scaling an agentic system somewhere in the enterprise, while another 39% were experimenting.</p><p class="source"><a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai">McKinsey Global Survey 2025</a></p></article>
+        <article class="card"><span class="kicker">Governance maturity</span><span class="metric">21%</span><p class="muted">reported mature agentic governance; Deloitte highlights missing boundaries, monitoring, approvals, and audit trails.</p><p class="source"><a href="https://www.deloitte.com/us/en/insights/topics/emerging-technologies/ai-agents-scaling-faster.html">Deloitte, 3,235 leaders</a></p></article>
+        <article class="card"><span class="kicker">Transparency gap</span><span class="metric">4 / 13</span><p class="muted">frontier-autonomy agents disclosed any agent-specific safety evaluation in the MIT AI Agent Index.</p><p class="source"><a href="https://aiagentindex.mit.edu/">MIT AI Agent Index</a></p></article>
+      </div>
+      <div class="callout" style="margin-top:18px"><strong>Market implication:</strong> “more autonomous agents” is not enough. Buyers increasingly need proof that agents finish useful work within policy, can be interrupted or approved, and leave a record that operations, finance, security, and customers can understand.</div>
+    </section>
+
+    <section id="landscape" class="wrap">
+      <div class="section-head"><h2>The competitive landscape</h2><p>Products that all use “AI employees” language are not necessarily competitors. The market separates into experience products, vertical outcome platforms, and enterprise governance/control.</p></div>
+      <div class="landscape">
+        <div class="lane-label"><strong>AI workforce experience</strong><small>Chat, named teammates, routines, integrations, delegated work.</small></div>
+        <div class="lane-products">
+          <div class="mini"><b>MissionControlHQ</b><p>Founder/SMB squad, chief of staff, board, approvals, runs, memory, 70+ integrations; $99/mo plus BYO AI.</p></div>
+          <div class="mini"><b>Grok Bot</b><p>Persistent cloud computer, mobile/desktop chat, multiple coordinating Bots, skills and routines; enterprise rollout in progress.</p></div>
+          <div class="mini"><b>Relevance / Lindy / Sintra</b><p>No-code workforces, teammate chat, large integration catalogs, role templates, routines, credit/action pricing.</p></div>
+        </div>
+        <div class="lane-label"><strong>Vertical outcome platforms</strong><small>One buyer, domain data, workflow depth, measurable economic result.</small></div>
+        <div class="lane-products">
+          <div class="mini"><b>Owner.com</b><p>Restaurants only; bundles acquisition, ordering, loyalty, mobile, analytics, onboarding, support, and revenue proof.</p></div>
+          <div class="mini"><b>Harvey</b><p>Legal/professional services; agents, matter spaces, vaults, governance, usage command center, industry trust.</p></div>
+          <div class="mini"><b>Sierra / Decagon / 11x</b><p>Customer experience or sales outcomes; deep systems integration and value metrics such as resolution, deflection, pipeline.</p></div>
+        </div>
+        <div class="lane-label"><strong>Enterprise control plane</strong><small>Inventory, identity, governance, security, observability, lifecycle.</small></div>
+        <div class="lane-products">
+          <div class="mini"><b>Microsoft Agent 365</b><p>Registry, Entra identity, least privilege, analytics, lifecycle, Defender and Purview integration.</p></div>
+          <div class="mini"><b>ServiceNow AI Control Tower</b><p>Cross-vendor discovery, runtime governance, observability, security, kill switch, and value measurement.</p></div>
+          <div class="mini"><b>CrewAI / Salesforce</b><p>Execution control or CRM-native agents with tracing, approvals, audit, and action/conversation economics.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="section-head"><h2>Competitive profiles</h2><p>Claims below are drawn from official product pages and documentation. Marketing metrics and testimonials are vendor-reported unless independently attributed.</p></div>
+      <div class="filterbar" role="group" aria-label="Filter competitors">
+        <button class="active" data-filter="all">All</button><button data-filter="direct">Direct experience</button><button data-filter="vertical">Vertical benchmark</button><button data-filter="control">Control plane</button>
+      </div>
+      <div class="grid grid-3" id="competitor-grid">
+        <article class="card competitor" data-group="direct"><span class="tag direct">Direct</span><h3>MissionControlHQ</h3><p><strong>Promise:</strong> teach an AI chief of staff how the business works; approve a squad; watch specialists run recurring work.</p><p><strong>Strength:</strong> ten-minute onboarding story, named agents, board/feed/runs/calendar/chat/approvals/docs/memory, flat platform price, founder-led support.</p><p><strong>Gap to exploit:</strong> broad SMB promise; public evidence is mostly vendor-authored. Our stronger angle can be reproducible client delivery, per-attempt isolation, real workspace diffs, and enterprise deployment evidence.</p><p class="source"><a href="https://missioncontrolhq.ai/">Product</a> · <a href="https://missioncontrolhq.ai/resources/multi-agent-mission-control">Category model</a> · <a href="https://missioncontrolhq.ai/privacy">Privacy</a></p></article>
+        <article class="card competitor" data-group="direct"><span class="tag direct">Direct</span><h3>Grok Bot</h3><p><strong>Promise:</strong> message persistent AI teammates that use their own computer and finish work across apps.</p><p><strong>Strength:</strong> mobile/desktop continuity, routines, computer use, group coordination, strong distribution through Grok/Cursor.</p><p><strong>Gap to exploit:</strong> bots for one member share a computer, permissions, files, and sign-ins; audit view and product-specific spend caps are still incomplete. Fresh task isolation, customer-owned infrastructure, and evidence-grade delivery can differentiate.</p><p class="source"><a href="https://x.ai/news/introducing-grok-bot">Launch</a> · <a href="https://docs.x.ai/grok-bot/teams-and-enterprises">Enterprise docs</a></p></article>
+        <article class="card competitor" data-group="direct"><span class="tag direct">Direct</span><h3>Relevance AI</h3><p><strong>Promise:</strong> visually build and deploy collaborative multi-agent workforces without code.</p><p><strong>Strength:</strong> large integration catalog, marketplace, no-code tools/agents/workforces, analytics and enterprise controls.</p><p><strong>Gap to exploit:</strong> builder complexity and action-credit economics. We can lead with a ready operating model, real sandboxed workspaces, and transparent task/attempt economics rather than another canvas.</p><p class="source"><a href="https://relevanceai.com/workforce">Workforce</a> · <a href="https://relevanceai.com/pricing">Pricing</a></p></article>
+        <article class="card competitor" data-group="direct"><span class="tag direct">Direct</span><h3>Lindy</h3><p><strong>Promise:</strong> an AI teammate inside Slack, iMessage, inboxes, meetings, routines, and connected tools.</p><p><strong>Strength:</strong> polished teammate UX, approvals on outside impact, thousands of integrations, clear credit pooling.</p><p><strong>Gap to exploit:</strong> per-user generalist experience rather than task-scoped client delivery with reproducible workspaces, diffs, and handoff evidence.</p><p class="source"><a href="https://www.lindy.ai/pricing">Features and pricing</a></p></article>
+        <article class="card competitor" data-group="direct"><span class="tag direct">Direct</span><h3>Sintra</h3><p><strong>Promise:</strong> twelve named helpers covering small-business marketing, support, sales, recruiting, and administration.</p><p><strong>Strength:</strong> approachable role packaging, mobile apps, low entry price, zero-technical-setup message.</p><p><strong>Gap to exploit:</strong> helper/output orientation rather than governed execution, client separation, proof-of-work, and operational reliability.</p><p class="source"><a href="https://www.sintra.com/">Product</a> · <a href="https://sintra.ai/pricing">Pricing</a></p></article>
+        <article class="card competitor" data-group="vertical"><span class="tag benchmark">GTM benchmark</span><h3>Owner.com</h3><p><strong>Promise:</strong> help independent restaurants grow profitable direct online sales like major chains.</p><p><strong>Strength:</strong> one industry, one buyer, one economic outcome; complete bundle; dedicated setup; 24/7 support; case studies framed in sales and fee savings.</p><p><strong>Lesson:</strong> performance beats endless customization. Package a proven delivery system for one ICP before offering a general agent platform.</p><p class="source"><a href="https://www.owner.com/">Product</a> · <a href="https://www.owner.com/pricing">Pricing</a> · <a href="https://www.owner.com/case-studies">Case studies</a></p></article>
+        <article class="card competitor" data-group="vertical"><span class="tag vertical">Vertical</span><h3>Harvey</h3><p><strong>Promise:</strong> frontier legal organizations run matters with lawyers and agents in one governed domain workspace.</p><p><strong>Strength:</strong> deep professional context, ethical walls, shared client spaces, enterprise controls, usage command center, industry partnerships.</p><p><strong>Lesson:</strong> domain workflow, governance, collaboration, and trust compound into a moat—not the base model.</p><p class="source"><a href="https://www.harvey.ai/">Product</a> · <a href="https://www.harvey.ai/platform/shared-spaces">Shared Spaces</a></p></article>
+        <article class="card competitor" data-group="vertical"><span class="tag vertical">Vertical</span><h3>Sierra &amp; Decagon</h3><p><strong>Promise:</strong> measurable customer outcomes across support channels, not generic agent productivity.</p><p><strong>Strength:</strong> omnichannel deployment, guardrails, testing, observability, continuous optimization, integrations, outcome pricing.</p><p><strong>Lesson:</strong> choose a business KPI and build the full operating loop around it. Customer support is attractive but already intensely contested.</p><p class="source"><a href="https://sierra.ai/product">Sierra</a> · <a href="https://decagon.ai/">Decagon</a></p></article>
+        <article class="card competitor" data-group="control"><span class="tag control">Control</span><h3>Microsoft &amp; ServiceNow</h3><p><strong>Promise:</strong> centrally observe, govern, secure, inventory, and measure agents across the enterprise.</p><p><strong>Strength:</strong> identity, security, compliance, lifecycle, cross-vendor discovery, risk posture, large installed bases.</p><p><strong>Strategic response:</strong> do not compete on universal fleet inventory. Become the execution/delivery plane that can export identities, audit, usage, and policy evidence into those ecosystems.</p><p class="source"><a href="https://www.microsoft.com/en-us/microsoft-agent-365">Agent 365</a> · <a href="https://www.servicenow.com/products/ai-control-tower.html">AI Control Tower</a></p></article>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="section-head"><h2>Where the current product can win</h2><p>The strongest differentiation is not agent personalities. It is the accountable work-order lifecycle already embedded in the architecture.</p></div>
+      <div class="grid grid-3">
+        <article class="card usp" data-number="1"><span class="tag win">USP</span><h3>Fresh isolation per attempt</h3><p>Each work order gets a fresh sandbox and immutable receiving envelope, reducing cross-task contamination and making policy easier to reason about.</p><ul><li>Contrast with long-lived/shared desktops.</li><li>Backend-neutral sandbox SPI.</li><li>Explicit resource and egress ceilings.</li></ul></article>
+        <article class="card usp" data-number="2"><span class="tag win">USP</span><h3>Proof-of-work package</h3><p>A completed run can carry a real git diff, snapshot, declared artifacts, summary, tools, skills, model usage, and handoff lineage.</p><ul><li>Customer-reviewable evidence.</li><li>Attempt-by-attempt provenance.</li><li>Reproducible delivery, not chat claims.</li></ul></article>
+        <article class="card usp" data-number="3"><span class="tag win">USP</span><h3>Human-gated delivery</h3><p>The harness owns external effects. Agents request handoffs and promotion; humans or deterministic policy approve consequential actions.</p><ul><li>Attention/approval queue.</li><li>Client sign-off.</li><li>Earned autonomy over time.</li></ul></article>
+        <article class="card usp" data-number="4"><span class="tag win">USP</span><h3>Open and model-neutral</h3><p>Self-host with Postgres, Docker, and a provider key. Swap engines, sandboxes, snapshots, channels, skills, and promotion targets through seams.</p><ul><li>No forced model bundle.</li><li>Customer-controlled data plane.</li><li>Community extension path.</li></ul></article>
+        <article class="card usp" data-number="5"><span class="tag win">USP</span><h3>Cost per accepted deliverable</h3><p>Attempt-first accounting can evolve beyond tokens into the metric buyers need: how much reliable, approved work reached completion.</p><ul><li>Cost by attempt/task/profile.</li><li>Rework and acceptance rate.</li><li>Budget and ROI evidence.</li></ul></article>
+        <article class="card usp" data-number="6"><span class="tag win">USP</span><h3>Client-safe workrooms</h3><p>Project and tenant isolation, read-only client views, scoped artifacts, approvals, and audit can turn agent execution into a new service-delivery model.</p><ul><li>Agency/consulting wedge.</li><li>Internal/external collaboration.</li><li>Reusable but governed profiles.</li></ul></article>
+      </div>
+    </section>
+
+    <section id="options" class="wrap">
+      <div class="section-head"><h2>Four positioning options</h2><p>The recommended choice is a hybrid: retain a horizontal open core, but commercialize through a narrow delivery-team use case.</p></div>
+      <div class="grid grid-2">
+        <article class="card option"><span class="option-number">01</span><span class="tag risk">Crowded</span><h3>AI chief of staff for every SMB</h3><p>Directly mimic MissionControlHQ, Grok Bot, Lindy, and Sintra with named employees, chat, schedules, and integrations.</p><p><strong>Upside:</strong> easy story and large top-of-funnel. <strong>Problem:</strong> lowest differentiation, massive integration/support burden, price pressure, and strongest platform competitors.</p><div class="score"><div><b>5/5</b><small>Clarity</small></div><div><b>2/5</b><small>Fit</small></div><div><b>1/5</b><small>Defensibility</small></div><div><b>2/5</b><small>Revenue</small></div></div></article>
+        <article class="card option"><span class="option-number">02</span><span class="tag vertical">Focused</span><h3>One-industry autonomous workforce</h3><p>Follow Owner/Harvey/Sierra: select one industry, own its data, integrations, workflows, compliance, onboarding, and value metric.</p><p><strong>Upside:</strong> strong pricing and proof. <strong>Problem:</strong> requires a domain choice and much more vertical product depth than exists today.</p><div class="score"><div><b>5/5</b><small>Clarity</small></div><div><b>3/5</b><small>Fit</small></div><div><b>5/5</b><small>Defensibility</small></div><div><b>5/5</b><small>Revenue</small></div></div></article>
+        <article class="card option recommended"><span class="option-number">03</span><span class="tag win">Recommended</span><h3>Agent delivery control plane</h3><p>Serve agencies, consultancies, MSPs, and enterprise delivery teams that need isolated execution, artifacts, review, client handoff, and economics.</p><p><strong>Upside:</strong> best architecture fit, meaningful enterprise wedge, open-source distribution, and room to verticalize by delivery pack. <strong>Trade-off:</strong> needs identity, tenancy, integrations, and polished proof-of-work UX.</p><div class="score"><div><b>4/5</b><small>Clarity</small></div><div><b>5/5</b><small>Fit</small></div><div><b>4/5</b><small>Defensibility</small></div><div><b>4/5</b><small>Revenue</small></div></div></article>
+        <article class="card option"><span class="option-number">04</span><span class="tag control">Platform</span><h3>Embedded/OEM agent operations</h3><p>Sell APIs and infrastructure to SaaS vendors that want task, sandbox, run, artifact, and approval capabilities inside their own product.</p><p><strong>Upside:</strong> high strategic value and clean architecture fit. <strong>Problem:</strong> long enterprise sales, demanding APIs/SLAs, weak immediate end-user feedback.</p><div class="score"><div><b>2/5</b><small>Clarity</small></div><div><b>5/5</b><small>Fit</small></div><div><b>4/5</b><small>Defensibility</small></div><div><b>5/5</b><small>Revenue</small></div></div></article>
+      </div>
+    </section>
+
+    <section id="gaps" class="wrap">
+      <div class="section-head"><h2>Product gaps to close for the recommended wedge</h2><p>The commercial product should be built around trust and delivery quality, not simply a larger roster of agents.</p></div>
+      <div class="grid grid-2">
+        <article class="card gap-card"><span class="gap-id">G1</span><span class="tag risk">P0</span><h3>Tenant, project, client &amp; identity boundary</h3><ul><li>Server-derived identity, SSO/OIDC, roles and membership.</li><li>Tenant-scoped persistence and artifact access.</li><li>Client reviewer role and secure read-only workroom.</li><li>Audit-grade actor and agent identity.</li></ul></article>
+        <article class="card gap-card"><span class="gap-id">G2</span><span class="tag risk">P0</span><h3>Reliable execution and recovery</h3><ul><li>Lease heartbeat, stale-completion fencing, cancellation.</li><li>Durable attempt finalization and projection repair.</li><li>Concurrency/idempotency and split-topology restart proof.</li><li>Failure taxonomy and operator remediation.</li></ul></article>
+        <article class="card gap-card"><span class="gap-id">G3</span><span class="tag risk">P0</span><h3>Trusted usage, cost &amp; value ledger</h3><ul><li>Fix real Pi usage normalization and retain provider cost.</li><li>Model/profile/version/pricing provenance per attempt.</li><li>Cost per accepted deliverable, rework, approval rate.</li><li>Budgets and honest missing-data states.</li></ul></article>
+        <article class="card gap-card"><span class="gap-id">G4</span><span class="tag direct">P1</span><h3>Integrations and credential broker</h3><ul><li>GitHub/GitLab, Linear/Jira, Slack/Teams first.</li><li>OAuth/secret references outside workspaces and prompts.</li><li>Per-connection scopes and per-agent policies.</li><li>Action ledger and approval class per integration.</li></ul></article>
+        <article class="card gap-card"><span class="gap-id">G5</span><span class="tag direct">P1</span><h3>Attention and delivery experience</h3><ul><li>Default view: approvals, blockers, failures, then in-flight.</li><li>Task conversation without overbuilding token streaming.</li><li>Client-ready artifact/diff/report presentation.</li><li>Notifications and mobile approvals after access control.</li></ul></article>
+        <article class="card gap-card"><span class="gap-id">G6</span><span class="tag direct">P1</span><h3>Profiles, skills and golden workflows</h3><ul><li>Immutable profile publishing and exact run pinning.</li><li>Delivery packs for code, research, QA, and incident review.</li><li>Evaluation suites and acceptance criteria per pack.</li><li>Safe marketplace/import model later.</li></ul></article>
+        <article class="card gap-card"><span class="gap-id">G7</span><span class="tag control">P1</span><h3>Enterprise observability and assurance</h3><ul><li>Task/attempt/tool/policy timeline and exports.</li><li>Success rate, latency, rework, violations, ROI dashboards.</li><li>Malicious-input, credential, egress, archive, IAM negatives.</li><li>Compliance evidence and deployment-specific claims.</li></ul></article>
+        <article class="card gap-card"><span class="gap-id">G8</span><span class="tag benchmark">P2</span><h3>Hosted onboarding and operational product</h3><ul><li>Workspace provisioning and one-hour first value.</li><li>Guided project/agent setup and sample engagement.</li><li>Backups, upgrades, retention, support and status.</li><li>Remote sandbox provider only when local wedge is stable.</li></ul></article>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="section-head"><h2>The first commercial product</h2><p>Package a complete delivery loop rather than a blank agent builder.</p></div>
+      <div class="grid grid-3">
+        <article class="card"><span class="tag win">Workflow 1</span><h3>Engineering change room</h3><p>Client request → scoped coder → reviewer → tests/diff → approval → patch/MR intent → client-visible evidence.</p></article>
+        <article class="card"><span class="tag win">Workflow 2</span><h3>Research and advisory room</h3><p>Brief → research agent → document/chart artifacts → review checklist → human correction → approved client deliverable.</p></article>
+        <article class="card"><span class="tag win">Workflow 3</span><h3>Incident investigation room</h3><p>Issue intake → reproduce/inspect → evidence timeline → proposed remediation → approval → post-mortem artifact. Add only after the first two are reliable.</p></article>
+      </div>
+      <div class="callout" style="margin-top:18px"><strong>North-star unit:</strong> an <em>accepted deliverable</em>, not a message, token, agent, or run. Optimize time-to-accepted-deliverable, cost per accepted deliverable, human review minutes, and rework rate.</div>
+    </section>
+
+    <section id="gtm" class="wrap">
+      <div class="section-head"><h2>Go-to-market strategy</h2><p>Use the open-source service to earn technical trust; use a narrow, services-assisted commercial offer to discover the repeatable product.</p></div>
+      <div class="grid grid-2">
+        <article class="card"><span class="kicker">Primary ICP</span><h3>AI-forward delivery teams, 20–500 employees</h3><ul><li>Software agencies and development consultancies.</li><li>Managed service providers and internal platform teams.</li><li>Professional-services teams delivering research or technical work.</li><li>At least two agent workflows already in use or pilot.</li><li>Pain: inconsistent output, manual handoffs, no cost/provenance, client trust.</li></ul></article>
+        <article class="card"><span class="kicker">Buying group</span><h3>Sell trust and throughput to three stakeholders</h3><ul><li><strong>Economic buyer:</strong> founder, COO, VP Delivery.</li><li><strong>Technical champion:</strong> CTO, Head of Engineering, AI Platform lead.</li><li><strong>Risk reviewer:</strong> security, IT, legal/compliance.</li><li><strong>Daily users:</strong> project manager, technical lead, reviewer.</li><li><strong>Beneficiary:</strong> client or internal stakeholder receiving the work.</li></ul></article>
+      </div>
+
+      <div class="roadmap" style="margin-top:22px">
+        <article class="card roadmap-item"><span class="tag risk">0–6 weeks</span><h3>Discovery and wedge validation</h3><p>Interview 25 delivery leaders; recruit 5 design partners; observe one real workflow each; baseline cycle time, rework, review time, failure recovery, and current agent cost. Test the phrase “client-safe agent delivery room.”</p></article>
+        <article class="card roadmap-item"><span class="tag direct">6–14 weeks</span><h3>Concierge pilot</h3><p>Deliver Engineering Change and Research Room as managed pilots. Founder-led onboarding, limited integrations, weekly reliability review. Target first accepted work order within 30 minutes and ten accepted deliverables in month one.</p></article>
+        <article class="card roadmap-item"><span class="tag direct">3–6 months</span><h3>Repeatable product and proof</h3><p>Publish 3 evidence-rich case studies, complete SSO/tenancy/usage ledger, add GitHub/GitLab + Linear/Jira + Slack/Teams, create a client reviewer view, and release versioned workflow packs.</p></article>
+        <article class="card roadmap-item"><span class="tag control">6–12 months</span><h3>Enterprise and ecosystem expansion</h3><p>Add remote sandboxes, policy/export integrations, scheduled triggers, advanced budgets/evals, and compatibility with enterprise agent identity/control ecosystems. Explore OEM/API distribution after the operating model is stable.</p></article>
+      </div>
+
+      <div class="grid grid-3" style="margin-top:20px">
+        <article class="card"><span class="kicker">Community</span><span class="metric">$0</span><p>Self-hosted single-tenant core, Docker/unix-local, board, profiles, snapshots, artifacts, local provider keys. Drives adoption and extensions.</p></article>
+        <article class="card"><span class="kicker">Managed design partner</span><span class="metric">$750–1.5k</span><p>Monthly hypothesis per isolated customer workspace, onboarding, backups, core integrations, support, usage visibility. Test willingness; do not publish prematurely.</p></article>
+        <article class="card"><span class="kicker">Enterprise</span><span class="metric">$25k–100k+</span><p>Annual hypothesis based on projects, governance, execution capacity and support—not agent seats or token markup. Requires SSO, audit, tenancy, SLAs, remote execution.</p></article>
+      </div>
+      <p class="source">Pricing above is a research hypothesis, not a recommendation to publish. Competitive reference points include MissionControlHQ at $99/mo plus AI, Owner at $249/mo + 5% or $499 flat, Relevance Team at $349/mo, Lindy at $29.99–199.99/user/mo, and enterprise platforms with custom or broader suite pricing.</p>
+    </section>
+
+    <section class="wrap">
+      <div class="section-head"><h2>Messaging and demand creation</h2><p>Lead with an operational pain and an evidence-backed result. “Multi-agent” is an implementation detail until it improves delivery.</p></div>
+      <div class="grid grid-3">
+        <article class="card"><span class="kicker">Homepage</span><h3>Delegate client work to agents without losing control.</h3><p>Every task runs in an isolated workspace and returns with reviewable evidence: diffs, artifacts, approvals, cost, and handoff.</p></article>
+        <article class="card"><span class="kicker">Category phrase</span><h3>Agent Delivery Control Plane</h3><p>More specific than “AI workforce,” more operational than “agent framework,” and narrower than universal enterprise agent governance.</p></article>
+        <article class="card"><span class="kicker">Proof</span><h3>Show the work, not a chatbot demo</h3><p>Live work-order timeline, failed/recovered attempt, artifact review, exact cost, policy denial, and client approval from one shareable task.</p></article>
+      </div>
+      <div class="grid grid-2" style="margin-top:16px">
+        <article class="card"><h3>Content engine</h3><ul><li>“The cost per accepted AI deliverable” benchmark.</li><li>Open test suites for agent handoff, isolation and recovery.</li><li>Reference architectures for client-safe agent workrooms.</li><li>Transparent build logs and adversarial reliability reports.</li></ul></article>
+        <article class="card"><h3>Distribution</h3><ul><li>GitHub/open-source community and provider integrations.</li><li>Design-partner outreach to agencies and consultancies.</li><li>Partnerships with model gateways, sandbox providers, Git hosts, Jira/Linear.</li><li>Later: enterprise marketplaces and systems integrators.</li></ul></article>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="section-head"><h2>Metrics that demonstrate a real product</h2><p>A trustworthy delivery platform should measure the system outcome, not celebrate the number of agents created.</p></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Stage</th><th>Metric</th><th>Initial target</th><th>Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td>Activation</td><td>Time to first accepted deliverable</td><td>&lt; 30 minutes</td><td>Tests onboarding, setup, and the full loop.</td></tr>
+            <tr><td>Adoption</td><td>Accepted work orders per active project/week</td><td>≥ 5</td><td>Shows recurring operational use, not experimentation.</td></tr>
+            <tr><td>Quality</td><td>First-pass acceptance rate</td><td>≥ 70% for a golden workflow</td><td>Connects agent output to usable work.</td></tr>
+            <tr><td>Efficiency</td><td>Human review minutes per accepted deliverable</td><td>Down 30% from baseline</td><td>Proves leverage without pretending review disappears.</td></tr>
+            <tr><td>Economics</td><td>Cost per accepted deliverable</td><td>Visible and trending down</td><td>More meaningful than raw tokens or agent count.</td></tr>
+            <tr><td>Reliability</td><td>Runs reaching one correct terminal state</td><td>≥ 99%</td><td>Core production trust.</td></tr>
+            <tr><td>Recovery</td><td>Orphan/stale attempt detection time</td><td>&lt; 5 minutes</td><td>Shows the control plane can operate unattended.</td></tr>
+            <tr><td>Security</td><td>Cross-tenant/artifact authorization failures</td><td>0 leakage; 100% negative tests pass</td><td>Required for client and enterprise use.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="section-head"><h2>Strategic risks and counter-moves</h2><p>The opportunity is real, but the product must resist three seductive failure modes.</p></div>
+      <div class="grid grid-3">
+        <article class="card"><span class="tag risk">Risk</span><h3>Feature-chasing generalists</h3><p>Trying to match 70+ integrations, mobile chat, memory, voice, schedules, and every agent role before proving a buyer.</p><p><strong>Counter:</strong> two golden workflows, four integrations, one ICP, measurable accepted deliverables.</p></article>
+        <article class="card"><span class="tag risk">Risk</span><h3>Infrastructure without a product</h3><p>A technically excellent sandbox/control plane can remain a developer component with no urgent buyer outcome.</p><p><strong>Counter:</strong> package client delivery rooms, onboarding, workflow packs, review UX, and business metrics.</p></article>
+        <article class="card"><span class="tag risk">Risk</span><h3>Enterprise claims before proof</h3><p>Self-hosting and isolation are not enough without identity, authorization, recovery, audit, live canaries, and operational support.</p><p><strong>Counter:</strong> publish explicit readiness levels and evidence; sell design partnerships before “enterprise-ready.”</p></article>
+      </div>
+    </section>
+
+    <section id="sources" class="wrap">
+      <div class="section-head"><h2>Sources and research notes</h2><p>Research performed 2026-08-30. Product capabilities and pricing change quickly; links are primary vendor pages unless noted.</p></div>
+      <ol class="source-list">
+        <li><a href="https://missioncontrolhq.ai/">MissionControlHQ product and pricing</a></li>
+        <li><a href="https://missioncontrolhq.ai/resources/multi-agent-mission-control">MissionControlHQ category definition</a></li>
+        <li><a href="https://missioncontrolhq.ai/resources/mission-control-dashboard">MissionControlHQ dashboard model</a></li>
+        <li><a href="https://missioncontrolhq.ai/privacy">MissionControlHQ privacy/isolation</a></li>
+        <li><a href="https://x.ai/news/introducing-grok-bot">SpaceXAI Grok Bot launch</a></li>
+        <li><a href="https://docs.x.ai/grok-bot/teams-and-enterprises">Grok Bot teams/enterprise controls</a></li>
+        <li><a href="https://docs.x.ai/grok-bot/bots">Grok Bot roles, memory and collaboration</a></li>
+        <li><a href="https://www.owner.com/">Owner.com product</a> and <a href="https://www.owner.com/pricing">pricing</a></li>
+        <li><a href="https://relevanceai.com/workforce">Relevance AI Workforce</a> and <a href="https://relevanceai.com/pricing">pricing</a></li>
+        <li><a href="https://www.lindy.ai/pricing">Lindy features and pricing</a></li>
+        <li><a href="https://www.sintra.com/">Sintra product and mobile positioning</a></li>
+        <li><a href="https://www.microsoft.com/en-us/microsoft-agent-365">Microsoft Agent 365</a></li>
+        <li><a href="https://www.servicenow.com/products/ai-control-tower.html">ServiceNow AI Control Tower</a></li>
+        <li><a href="https://crewai.com/">CrewAI platform/control plane</a></li>
+        <li><a href="https://www.salesforce.com/agentforce/pricing/">Salesforce Agentforce pricing</a></li>
+        <li><a href="https://www.harvey.ai/">Harvey legal AI</a></li>
+        <li><a href="https://sierra.ai/product">Sierra customer experience platform</a></li>
+        <li><a href="https://decagon.ai/">Decagon customer experience platform</a></li>
+        <li><a href="https://www.langchain.com/state-of-agent-engineering">LangChain State of Agent Engineering</a></li>
+        <li><a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai">McKinsey State of AI 2025</a></li>
+        <li><a href="https://www.deloitte.com/us/en/insights/topics/emerging-technologies/ai-agents-scaling-faster.html">Deloitte agent governance survey</a></li>
+        <li><a href="https://aiagentindex.mit.edu/">MIT AI Agent Index</a></li>
+      </ol>
+      <div class="callout warning"><strong>Confidence note:</strong> MissionControlHQ is early and much of its proof is first-party. Grok Bot is early beta and enterprise rollout is still evolving. Owner, Harvey, Sierra, Decagon, Microsoft, Salesforce, and ServiceNow operate at different scales and categories; they are included to extract product and GTM patterns, not to imply feature equivalence.</div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <strong>Internal repository context</strong>
+      <p><a href="service-state-and-roadmap.html">Service state and hardening map</a> · <a href="brand-naming-strategy-2026.html">Brand naming strategy</a> · <a href="specs/2026-08-29-generic-open-source-service-spec.md">Generic service product spec</a> · <a href="reviews/2026-08-30-phase-5-chat-sse-orchestrator-review.md">Chat/orchestrator architecture review</a></p>
+      <p>This is a strategy document, not a claim that the current open-source service already satisfies enterprise, tenant-isolation, compliance, hosted-service, or mobile requirements.</p>
+    </div>
+  </footer>
+
+  <script>
+    const buttons = document.querySelectorAll('[data-filter]');
+    const competitors = document.querySelectorAll('.competitor[data-group]');
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      const filter = button.dataset.filter;
+      buttons.forEach((candidate) => candidate.classList.toggle('active', candidate === button));
+      competitors.forEach((card) => card.classList.toggle('hidden', filter !== 'all' && card.dataset.group !== filter));
+    }));
+  </script>
+</body>
+</html>

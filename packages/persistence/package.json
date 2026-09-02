@@ -1,0 +1,26 @@
+{
+  "name": "@remote-sandbox-agents/persistence",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "build:migrations": "mkdir -p dist/migrations && cp src/migrations/*.sql dist/migrations/",
+    "test": "tsc -b --pretty false && node --test dist/**/*.test.js"
+  },
+  "dependencies": {
+    "@remote-sandbox-agents/contracts": "0.1.0",
+    "@remote-sandbox-agents/shared": "0.1.0",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.10"
+  }
+}

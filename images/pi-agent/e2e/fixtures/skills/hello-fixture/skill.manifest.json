@@ -1,0 +1,7 @@
+{
+  "name": "hello-fixture",
+  "version": "0.0.1",
+  "engines": ["pi-agent"],
+  "toolDeps": [],
+  "entry": "SKILL.md"
+}

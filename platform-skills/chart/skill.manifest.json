@@ -1,0 +1,9 @@
+{
+  "name": "chart",
+  "version": "1.0.0",
+  "engines": ["pi-agent"],
+  "toolDeps": ["shell", "write_file"],
+  "entry": "SKILL.md",
+  "riskClass": "shell",
+  "notes": "Renders YAML Vega-Lite specs to SVG via scripts/render.mjs. Requires Node 18+ inside the sandbox; run `npm install --production` in the skill directory once per workspace before first render."
+}

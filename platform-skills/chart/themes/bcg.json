@@ -1,0 +1,20 @@
+{
+  "name": "bcg",
+  "font": "system-ui, -apple-system, sans-serif",
+  "primaryColor": "#29BA74",
+  "categoryPalette": ["#29BA74", "#147B58", "#333333", "#5DD9A0", "#888888", "#A8E8C8"],
+  "variants": {
+    "light": {
+      "text": "#1a1a1a",
+      "textLight": "#555555",
+      "divider": "#dce8e2",
+      "bgGray": "#f4f9f6"
+    },
+    "dark": {
+      "text": "#edf5f0",
+      "textLight": "#99b3a6",
+      "divider": "#3a4f44",
+      "bgGray": "#1c2a22"
+    }
+  }
+}

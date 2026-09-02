@@ -1,0 +1,43 @@
+{
+  "name": "remote-sandbox-agents",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "tsc -b packages/contracts packages/shared packages/orchestrator packages/worker packages/sandbox packages/skills packages/persistence packages/agent-engines packages/channels packages/scheduler && npm -w packages/persistence run build:migrations && npm -w packages/orchestrator run build:assets && npm -w packages/worker run build:assets && npm run build:pi-runner && npm run build:web",
+    "build:pi-runner": "node scripts/build-pi-runner.mjs",
+    "build:pi-agent-image": "bash scripts/build-pi-agent-image.sh",
+    "check": "tsc -b packages/contracts packages/shared packages/orchestrator packages/worker packages/sandbox packages/skills packages/persistence packages/agent-engines packages/channels packages/scheduler --pretty",
+    "test": "npm run test:contracts && npm run test:orchestrator && npm run test:worker && npm run test:sandbox && npm run test:skills && npm run test:persistence && npm run test:agent-engines && npm run test:channels && npm run test:scheduler",
+    "test:sandbox": "tsc -b packages/sandbox --pretty false && node --test \"packages/sandbox/dist/**/*.test.js\"",
+    "test:skills": "tsc -b packages/skills --pretty false && node --test \"packages/skills/dist/**/*.test.js\"",
+    "test:persistence": "tsc -b packages/persistence --pretty false && node --test packages/persistence/dist/**/*.test.js",
+    "test:worker": "tsc -b packages/worker --pretty false && node --test packages/worker/dist/**/*.test.js",
+    "test:scheduler": "tsc -b packages/scheduler --pretty false && node --test packages/scheduler/dist/wiring/*.test.js packages/scheduler/dist/api/*.test.js packages/scheduler/dist/control/board-snapshots/*.test.js packages/scheduler/dist/runtime/*.test.js",
+    "test:orchestrator": "tsc -b packages/orchestrator --pretty false && node --test packages/orchestrator/dist/**/*.test.js",
+    "test:contracts": "tsc -b packages/contracts --pretty false && node --test packages/contracts/dist/**/*.test.js",
+    "test:agent-engines": "tsc -b packages/agent-engines --pretty false && node --test packages/agent-engines/dist/**/*.test.js",
+    "test:channels": "tsc -b packages/channels --pretty false && node --test packages/channels/dist/*.test.js packages/channels/dist/board/*.test.js",
+    "start:api": "node packages/scheduler/dist/index.js --role api",
+    "build:web": "npm -w @remote-sandbox-agents/web run build",
+    "dev:web": "npm -w @remote-sandbox-agents/web run dev",
+    "clean": "rm -rf packages/*/dist packages/*/*.tsbuildinfo packages/*/src/*.js packages/*/src/*.js.map packages/*/src/*.d.ts"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "4.0.9",
+    "@types/node": "^22.15.17",
+    "@types/uuid": "10.0.0",
+    "esbuild": "^0.28.1",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@earendil-works/pi-ai": "^0.74.2",
+    "@earendil-works/pi-coding-agent": "^0.78.0",
+    "js-yaml": "4.1.1",
+    "uuid": "9.0.1"
+  }
+}

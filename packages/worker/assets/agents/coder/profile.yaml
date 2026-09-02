@@ -1,0 +1,41 @@
+id: coder
+actor: worker
+runtime: sandbox-docker
+engine: pi-agent
+model:
+  id: gpt-5.4-mini
+  sandbox: workspace-write
+  approvalPolicy: never
+toolsets: []
+skills:
+  mode: named
+  names:
+    - repo-orientation
+policies:
+  approvalPolicy: never
+  # 8 was the legacy default and proved far too tight: the model burned every turn on exploration 
+  # (read README/WORKFLOW/src, apply_patch retry, re-read) and never reached the final `handoff` call.
+  # 30 leaves headroom for orient → edit → test → commit → handoff while
+  # still bounding cost. Raise further only if profiles routinely hit it.
+  maxTurns: 30
+  turnTimeoutMs: 1800000
+  maxToolCalls: 200
+  maxRuntimeMinutes: 30
+workspaceRetention: delete-on-success
+scopePolicy:
+  allowedRepos:
+    - sample/service
+  allowedMountTypes:
+    - git
+  pathDenylist:
+    - "**/.env"
+    - "**/.git/config"
+    - "infra/**"
+  maxMountedPaths: 50
+  egressAllowlist: []
+capabilities:
+  - filesystem
+  - shell
+  - apply_patch
+  - handoff
+  - request_mr

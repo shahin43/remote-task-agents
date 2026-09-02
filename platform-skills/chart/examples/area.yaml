@@ -1,0 +1,19 @@
+title: Cumulative Sign-ups
+mark: area
+data:
+  values:
+    - month: Jan
+      total: 500
+    - month: Feb
+      total: 1200
+    - month: Mar
+      total: 2400
+    - month: Apr
+      total: 4100
+    - month: May
+      total: 6500
+    - month: Jun
+      total: 9800
+encoding:
+  x: { field: month, type: ordinal, title: null }
+  y: { field: total, type: quantitative, title: Total Users }

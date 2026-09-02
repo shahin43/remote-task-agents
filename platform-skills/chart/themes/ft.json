@@ -1,0 +1,20 @@
+{
+  "name": "ft",
+  "font": "system-ui, -apple-system, sans-serif",
+  "primaryColor": "#0D7680",
+  "categoryPalette": ["#0D7680", "#990F3D", "#FF7FAA", "#0F5499", "#593380", "#00994D"],
+  "variants": {
+    "light": {
+      "text": "#33302e",
+      "textLight": "#807973",
+      "divider": "#e0d8d0",
+      "bgGray": "#fff1e5"
+    },
+    "dark": {
+      "text": "#f2e5d7",
+      "textLight": "#a69888",
+      "divider": "#504840",
+      "bgGray": "#2e2620"
+    }
+  }
+}

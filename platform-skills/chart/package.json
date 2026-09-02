@@ -1,0 +1,12 @@
+{
+  "name": "@onsen-ai/chart-skill",
+  "version": "1.0.0",
+  "description": "Claude Code skill for generating publication-grade charts from YAML specs",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "js-yaml": "^4.1.1",
+    "vega": "^6.2.0",
+    "vega-lite": "^6.4.2"
+  }
+}

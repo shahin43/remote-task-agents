@@ -1,0 +1,20 @@
+{
+  "name": "onsen",
+  "font": "system-ui, -apple-system, sans-serif",
+  "primaryColor": "#4d93e5",
+  "categoryPalette": ["#4d93e5", "#ff667d", "#ffb638", "#5d7290", "#3774ce", "#b8cce9"],
+  "variants": {
+    "light": {
+      "text": "#273763",
+      "textLight": "#5d7290",
+      "divider": "#d6e4f7",
+      "bgGray": "#f5f8fc"
+    },
+    "dark": {
+      "text": "#e9f2fd",
+      "textLight": "#abbcd3",
+      "divider": "#516784",
+      "bgGray": "#28303e"
+    }
+  }
+}

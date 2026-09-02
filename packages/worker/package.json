@@ -1,0 +1,28 @@
+{
+  "name": "@remote-sandbox-agents/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "build:assets": "mkdir -p dist/assets/agents && rm -rf dist/assets/agents && mkdir -p dist/assets/agents && cp -R ../../agents/. dist/assets/agents/",
+    "test": "tsc -b --pretty false && node --test dist/**/*.test.js"
+  },
+  "dependencies": {
+    "@remote-sandbox-agents/contracts": "0.1.0",
+    "@remote-sandbox-agents/sandbox": "0.1.0",
+    "@remote-sandbox-agents/shared": "0.1.0"
+  },
+  "devDependencies": {
+    "@remote-sandbox-agents/orchestrator": "*"
+  }
+}

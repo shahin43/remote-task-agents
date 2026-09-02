@@ -1,0 +1,22 @@
+# Local Docker-sandbox worker: host daemon socket, Docker CLI in the worker image.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.docker-worker.yml --profile reconciler up --build
+
+services:
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: remote-agent-worker-docker
+    volumes:
+      - ./runs:/app/runs
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      REMOTE_AGENT_WORKER_RUNTIME: sandbox-docker
+      REMOTE_AGENT_DOCKER_BIN: docker
+      REMOTE_AGENT_WORKER_IMAGE: ${REMOTE_AGENT_WORKER_IMAGE:-remote-sandbox-agents/pi-agent:local}
+
+  reconciler:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      REMOTE_AGENT_DOCKER_BIN: docker

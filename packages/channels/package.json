@@ -1,0 +1,22 @@
+{
+  "name": "@remote-sandbox-agents/channels",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "tsc -b --pretty false && node --test dist/**/*.test.js"
+  },
+  "dependencies": {
+    "@remote-sandbox-agents/contracts": "0.1.0",
+    "@remote-sandbox-agents/persistence": "0.1.0"
+  }
+}

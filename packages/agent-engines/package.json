@@ -1,0 +1,17 @@
+{
+  "name": "@remote-sandbox-agents/agent-engines",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@remote-sandbox-agents/contracts": "*",
+    "@remote-sandbox-agents/persistence": "*",
+    "@earendil-works/pi-ai": "*"
+  }
+}

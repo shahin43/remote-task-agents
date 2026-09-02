@@ -1,0 +1,24 @@
+{
+  "name": "@remote-sandbox-agents/sandbox",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./testing": {
+      "source": "./src/testing/fake-provider.ts",
+      "types": "./dist/testing/fake-provider.d.ts",
+      "default": "./dist/testing/fake-provider.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "tsc -b --pretty false && node --test dist/**/*.test.js"
+  }
+}
