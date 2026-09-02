@@ -27,10 +27,8 @@ to the control plane.
 - **[DEVELOPMENT.md](DEVELOPMENT.md)** — development guidelines, spec progress table,
   how the loop actually runs (host API vs Docker sandbox). Keep `docs/tasks/` in sync.
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** — canonical architecture.
-- **[docs/specs/2026-08-29-generic-open-source-service-spec.md](docs/specs/2026-08-29-generic-open-source-service-spec.md)**
-  — the product spec: vision, sandbox provider SPI, chat, access layer, phasing.
-- **[docs/specs/2026-08-29-port-from-dns-remote-agent.md](docs/specs/2026-08-29-port-from-dns-remote-agent.md)**
-  — Phase 0 porting spec (historical keep/drop).
+- **[docs/README.md](docs/README.md)** — docs index: how to pick work, checks before
+  claiming done, specs, task tracker, research papers.
 
 ## Current state
 

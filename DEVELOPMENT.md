@@ -1,13 +1,16 @@
 # Development guidelines and progress
 
 This is the **development guide** for `remote-sandbox-agents`: how we work, which
-specs are canonical, and where progress lives. Checklists in `docs/tasks/` must
-stay in sync with the table below. Session notes go in `docs/session-handoff/`.
+specs are canonical, and where progress lives. The docs landing page is
+[docs/README.md](docs/README.md) (how agents pick work, checks, specs, papers).
+Checklists in `docs/tasks/` must stay in sync with the table below. Session notes
+go in `docs/session-handoff/`.
 
 ## Canonical docs (read in this order)
 
 | Doc | Role |
 |---|---|
+| [docs/README.md](docs/README.md) | Docs index: pick work, checks, specs, tracker, papers |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Mental model, planes, sandbox SPI, skills |
 | [docs/specs/2026-08-29-generic-open-source-service-spec.md](docs/specs/2026-08-29-generic-open-source-service-spec.md) | Product spec (§6 phasing is the roadmap) |
 | [docs/specs/2026-08-29-task-artifact-preview.md](docs/specs/2026-08-29-task-artifact-preview.md) | Phase 4 spec (artifact preview, task-view hardening) |

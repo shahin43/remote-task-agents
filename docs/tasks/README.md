@@ -1,7 +1,9 @@
 # Task tracker
 
 **Index of progress:** keep this folder in sync with the table in
-[DEVELOPMENT.md](../../DEVELOPMENT.md) (root development guide).
+[DEVELOPMENT.md](../../DEVELOPMENT.md) (root development guide). How to pick
+the next item, and what to check before claiming done:
+[docs/README.md](../README.md).
 
 Specs:
 

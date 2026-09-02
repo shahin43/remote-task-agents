@@ -24,39 +24,64 @@ are out of scope. Run end-to-end with only:
 | Platform skills | `repo-orientation`, `business-paper`, `chart` |
 | Sample repo | `fixtures/sample-service/` (initialized into `runs/seed/sample-service`) |
 
-## Quick start
+## Run locally
+
+The Node process does **not** load `.env` by itself. Put the provider key in
+`.env` (gitignored), then either source it before starting the API, or use
+`scripts/live-board-e2e.sh`, which sources `.env` for you.
+
+### First-time setup
 
 ```bash
-cp .env.example .env   # set OPENAI_API_KEY or ANTHROPIC_API_KEY
-docker compose up postgres -d
-bash scripts/init-sample-fixture.sh
+cp .env.example .env          # set OPENAI_API_KEY or ANTHROPIC_API_KEY
+docker compose up postgres -d # host port 5433, user/db remote_agent
 npm install
 npm run build
 npm run build:web
-npm run build:pi-agent-image   # once; guest image remote-sandbox-agents/pi-agent:local
-DATABASE_URL='postgres://remote_agent@127.0.0.1:5433/remote_agent' \
-REMOTE_AGENT_BOARD_PROJECT_ID='sample/service' \
+npm run build:pi-agent-image  # once; guest image remote-sandbox-agents/pi-agent:local
+bash scripts/init-sample-fixture.sh
+```
+
+Postgres can stay up between runs (`docker compose up postgres -d`). Rebuild the
+guest image only when the Pi runner or Dockerfile changes.
+
+### Interactive board (API + worker on the host)
+
+```bash
+set -a && source .env && set +a
+export DATABASE_URL="${DATABASE_URL:-postgres://remote_agent@127.0.0.1:5433/remote_agent}"
+export REMOTE_AGENT_BOARD_PROJECT_ID="${REMOTE_AGENT_BOARD_PROJECT_ID:-sample/service}"
 node packages/scheduler/dist/index.js --role api --with-worker
 ```
 
 Board: `http://127.0.0.1:8787/app/`
 
-Unattended regression: `bash scripts/live-board-e2e.sh` (Postgres + Docker + a provider key).
+Agents run in Docker (`sandbox-docker`). Create a task on the board assigned to
+`agent-coder` or `agent-author`; the host worker picks it up.
 
-## Where to start
+### Unattended two-task e2e
 
-1. [`docs/service-state-and-roadmap.html`](docs/service-state-and-roadmap.html) — visual service state, hardening map, usage/cost truth, and roadmap.
-2. [`docs/market-research-and-gtm-2026.html`](docs/market-research-and-gtm-2026.html) — competitive research, positioning options, recommended wedge, and go-to-market strategy.
-3. [`docs/brand-naming-strategy-2026.html`](docs/brand-naming-strategy-2026.html) — researched open-source launch name, alternatives, collision screen, and brand architecture.
-4. [`docs/hermes-agent-implementation-review-2026.html`](docs/hermes-agent-implementation-review-2026.html) — source-grounded review of Hermes profiles, memory hydration, learning, delegation, Kanban handoff, hosted rooms, and sessions.
-5. `DEVELOPMENT.md` — guidelines, spec progress, how processes vs sandboxes run.
-6. `ARCHITECTURE.md` — mental model and extension seams.
-7. `AGENTS.md` — commands, conventions, environment, e2e definition of working.
-8. `docs/tasks/README.md` — done / in-progress / later checklists.
-9. `docs/specs/2026-08-29-generic-open-source-service-spec.md` — product spec.
-10. [`docs/specs/2026-08-29-chat-orchestration.md`](docs/specs/2026-08-29-chat-orchestration.md) — Phase 5A chat, durable SSE, and direct conversation spec.
-11. [`docs/specs/2026-08-31-durable-agent-coordination-and-handoffs.md`](docs/specs/2026-08-31-durable-agent-coordination-and-handoffs.md) — Phase 5B durable profiles, sessions, delegation, child return, and typed handoff spec.
-12. `docs/specs/2026-08-29-port-from-dns-remote-agent.md` — Phase 0 porting spec.
+Requires Postgres, Docker, and a provider key in `.env`. Seeds the sample repo,
+builds, starts `api --with-worker`, then:
+
+1. Coder → reviewer on `sample/service` (git-artifact promotion)
+2. Author zero-repo paper with a declared artifact preview
+
+```bash
+bash scripts/live-board-e2e.sh
+```
+
+The script stops the API when it exits. A PASS line looks like
+`PASS: e2e legs=all`. Logs land in `runs/e2e-logs/`.
+
+## Key docs
+
+| File | Role |
+|---|---|
+| [DEVELOPMENT.md](DEVELOPMENT.md) | How we work, spec progress, how processes vs sandboxes run |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Mental model and extension seams |
+| [AGENTS.md](AGENTS.md) | Commands, conventions, environment, e2e definition of working |
+| [docs/README.md](docs/README.md) | Specs, task tracker, research papers, and how agents pick work |
 
 ## License
 
